@@ -1,0 +1,11 @@
+{
+    "cSpell.words": [
+        "devcontainers",
+        "levelno"
+    ],
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.inlayHints.callArgumentNames": "partial",
+    "python.analysis.inlayHints.pytestParameters": true
+}
