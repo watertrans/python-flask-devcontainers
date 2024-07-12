@@ -1,6 +1,10 @@
+from errors import bp as errors_bp
+from pages import bp as pages_bp
+from flask import Flask
 import logging as log
 import sys
 import os
+
 
 def setup_logger():
     """
@@ -29,11 +33,8 @@ def setup_logger():
 
     return logger
 
-logger = setup_logger()
 
-from flask import Flask
-from pages import bp as pages_bp
-from errors import bp as errors_bp
+logger = setup_logger()
 
 app = Flask(__name__)
 app.register_blueprint(pages_bp)
