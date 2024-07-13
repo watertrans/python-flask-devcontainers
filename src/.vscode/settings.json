@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "devcontainers",
+        "jsonify",
         "levelno"
     ],
     "python.analysis.typeCheckingMode": "strict",

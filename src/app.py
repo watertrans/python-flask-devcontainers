@@ -20,7 +20,7 @@ def setup_logger():
     stderr_handler = log.StreamHandler(sys.stderr)
     stderr_handler.setLevel(log.ERROR)
 
-    logger = log.getLogger('Python DevContainers')
+    logger = log.getLogger("Python DevContainers")
 
     # The log output level can be controlled by environment variables. The default and invalid value is INFO.
     log_level_str = os.getenv("LOG_LEVEL", "INFO")
