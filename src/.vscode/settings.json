@@ -3,7 +3,8 @@
         "devcontainers",
         "jsonify",
         "levelname",
-        "levelno"
+        "levelno",
+        "Logfmt"
     ],
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.inlayHints.functionReturnTypes": true,

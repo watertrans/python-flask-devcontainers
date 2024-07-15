@@ -1,7 +1,7 @@
 from errors import bp as errors_bp
 from pages import bp as pages_bp
 from flask import Flask
-from utils import setup_logger
+from log_setup import setup_logger
 
 logger = setup_logger(__name__)
 
