@@ -4,7 +4,9 @@
         "jsonify",
         "levelname",
         "levelno",
-        "Logfmt"
+        "Logfmt",
+        "signin",
+        "signup"
     ],
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.inlayHints.functionReturnTypes": true,

@@ -14,3 +14,18 @@ def home():
 @bp.route("/about")
 def about():
     return render_template("pages/about.html")
+
+
+@bp.route("/signin")
+def signin():
+    return render_template("pages/signin.html")
+
+
+@bp.route("/signup")
+def signup():
+    return render_template("pages/signup.html")
+
+
+@bp.route("/reset-password")
+def reset_password():
+    return render_template("pages/reset_password.html")

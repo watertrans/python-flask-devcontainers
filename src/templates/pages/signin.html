@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<h1>{% block title %}SIGN IN{% endblock title %}</h1>
+{% endblock header %}
+
+{% block content %}
+<div class="flex items-center justify-center grow">
+  <div class="card card-signin">
+    <form action="#" class="card-body flex flex-col gap-5" method="get">
+      <div class="text-center">
+        <h3>
+          Sign in
+        </h3>
+        <div class="flex items-center justify-center font-medium">
+          <span class="text-sm text-gray-6">
+            Don't have an account?
+          </span>
+          <a class="text-sm link ml-1" href="{{ url_for('pages.signup') }}">
+            Sign up
+          </a>
+        </div>
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="form-label">
+          Email
+        </label>
+        <input class="input" name="email" placeholder="email@example.com" type="text" id="email" value="">
+      </div>
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center justify-between gap-1">
+          <label class="form-label">
+            Password
+          </label>
+          <a class="text-sm link shrink-0" href="{{ url_for('pages.reset_password') }}">
+            Forgot Password?
+          </a>
+        </div>
+        <input class="input" name="password" placeholder="Enter Password" type="password" id="password" value="">
+      </div>
+      <label class="checkbox-group">
+        <input class="checkbox" name="check" type="checkbox" id="remember_me" value="1">
+        <span class="checkbox-label" for="remember_me">
+          Remember me
+        </span>
+      </label>
+      <button class="btn btn-primary flex justify-center grow text-md">
+        Sign In
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}
