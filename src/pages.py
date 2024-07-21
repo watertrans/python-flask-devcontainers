@@ -16,6 +16,11 @@ def about():
     return render_template("pages/about.html")
 
 
+@bp.route("/forms")
+def forms():
+    return render_template("pages/forms.html")
+
+
 @bp.route("/signin")
 def signin():
     return render_template("pages/signin.html")

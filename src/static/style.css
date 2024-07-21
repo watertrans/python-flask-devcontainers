@@ -1,3 +1,7 @@
+/* =======================================================================================
+   Variables used in CSS.
+   ======================================================================================= */
+
 :root {
     --font-family-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-family-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
@@ -12,7 +16,9 @@
 
     --primary: #1b84ff;
     --primary-active: #056ee9;
-    --primary-light: #eff6ff;
+
+    --secondary: #7d7d7d;
+    --secondary-active: #494949;
 
     --white: #fff;
     --gray-1: #f9f9f9;
@@ -26,11 +32,26 @@
     --gray-9: #101010;
     --black: #000;
 
+    --font-size: 1rem;
+    --font-weight: 400;
+    --line-height: 1.5;
+    --text-color: #252525;
+    --outline-color: #a4a2d3;
+
+    --form-text-color: #252525;
+    --form-border-color: #cccccc;
+    --form-bg-color: #fff;
+    --form-disabled: #dfdfdf;
+
     --card-box-shadow: 
-    --card-border: 1px solid var(--gray-2);
+    --card-border: 1px solid #f1f1f1;
     --card-box-shadow: 0px 3px 3px 0px #00000010;
     --card-background-color: #fff;
 }
+
+/* =======================================================================================
+   Overall element style.
+   ======================================================================================= */
 
 *,
 *:before,
@@ -40,16 +61,59 @@
 
 body {
     font-family: var(--font-family);
-    color: var(--gray-8);
+    font-size: var(--font-size);
+    font-weight: var(--font-weight);
+    line-height: var(--line-height);
+    color: var(--text-color);
 }
 
 * {
     font-family: inherit;
-    color: var(--gray-8);
+    line-height: var(--line-height);
+    color: var(--text-color);
 }
+
+*:focus {
+    outline: 2px solid var(--outline-color);
+}
+
+::placeholder {
+    opacity: 0.5;
+    color: var(--text-color);
+}
+  
 
 h1, h2, h3, h4, h5, h6 {
     font-family: var(--heading-font-family);
+}
+
+input[type=file],
+input[type=file]::-webkit-file-upload-button {
+    cursor: pointer;
+    font-family: var(--font-family);
+}
+
+input[type="text"]::-webkit-calendar-picker-indicator,
+input[type="email"]::-webkit-calendar-picker-indicator,
+input[type="number"]::-webkit-calendar-picker-indicator, 
+input[type="search"]::-webkit-calendar-picker-indicator {
+    display: none !important;
+}
+
+/* =======================================================================================
+   Individual element classes specific to the application.
+   ======================================================================================= */
+
+.card-signin {
+    width: 400px;
+}
+
+.card-signup {
+    width: 400px;
+}
+
+.card-reset-password {
+    width: 400px;
 }
 
 /* =======================================================================================
@@ -2044,10 +2108,112 @@ h1, h2, h3, h4, h5, h6 {
    Form classes inspired by the style of Bootstrap CSS.
    ======================================================================================= */
 
+.form-group {
+    margin-bottom: 0.5rem;
+}
+
 .form-label {
-    font-weight: 500;
+    font-weight: 600;
     display: flex;
     width: 100%;
+    margin-bottom: .25rem;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .25rem .5rem;
+    line-height: 1.5;
+    color: var(--form-text-color);
+    background-color: var(--form-bg-color);
+    background-clip: padding-box;
+    border: 1px solid var(--form-border-color);
+    border-radius: .375rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-control:disabled,
+.form-control[disabled] {
+    background-color: var(--form-disabled);
+}
+
+.form-control-plaintext {
+    display: block;
+    width: 100%;
+    padding: .25rem .5rem;
+    line-height: 1.5;
+    color: var(--text-color);
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: .375rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-control[type=file] {
+    background-color: transparent;
+    border: solid transparent;
+    border-width: 1px 0;
+}
+
+.form-control[type=file]:not(:disabled):not([readonly]) {
+    cursor: pointer;
+}
+
+.form-select {
+    display: block;
+    width: 100%;
+    padding: .25rem .5rem;
+    color: var(--form-text-color);
+    background-color: var(--form-bg-color);
+    background-clip: padding-box;
+    border: 1px solid var(--form-border-color);
+    border-radius: .375rem;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.form-select:disabled,
+.form-select[disabled] {
+    background-color: var(--form-disabled);
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    padding: .25rem 0;
+}
+
+.form-check-inline {
+    display: inline-block;
+    padding: .25rem 0;
+}
+
+.form-check-input {
+    cursor: pointer;
+    background-color: var(--form-bg-color);
+    border: 1px solid var(--form-border-color);
+}
+
+.form-check-label {
+    cursor: pointer;
+    font-size: .875rem;
+    padding-left: .25rem;
+}
+
+.form-check-input:disabled~.form-check-label,
+.form-check-input[disabled]~.form-check-label {
+    cursor: default;
+    opacity: .5;
+}
+
+.form-check-input:disabled,
+.form-check-input[disabled] {
+    cursor: default;
 }
 
 .link {
@@ -2058,55 +2224,42 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--primary-active);
 }
 
-.form-hint {
-    color: var(--gray-5);
-    font-weight: 500;
-    font-size: .75rem;
-}
-
-.input {
-    display: block;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    box-shadow: none;
-    outline: none;
-    line-height: 1.5;
-    border-radius: .375rem;
-    padding: .5rem .75rem;
-    border: 1px solid var(--gray-3);
-}
-
 .btn {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
     line-height: 1;
     border-radius: .375rem;
-    height: 2.5rem;
+    height: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
     border: 1px solid #0000;
-    font-weight: 500;
-}
-
-.btn-icon i {
-    line-height: 0!important;
-}
-
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: .4rem;
-}
-
-.checkbox {
-    cursor: pointer;
-}
-
-.checkbox-label {
     font-size: .875rem;
-    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: var(--primary);
+}
+
+.btn-primary.active,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:hover {
+    background-color: var(--primary-active);
+}
+
+.btn-secondary {
+    color: #fff;
+    background-color: var(--secondary);
+}
+
+.btn-secondary.active,
+.btn-secondary:active,
+.btn-secondary:focus,
+.btn-secondary:hover {
+    background-color: var(--secondary-active);
 }
 
 .card {
@@ -2145,12 +2298,4 @@ h1, h2, h3, h4, h5, h6 {
     justify-content: space-between;
     border-top: var(--card-border);
     padding: .75rem 1.875rem;
-}
-
-.card-signin {
-    width: 400px;
-}
-
-.card-signup {
-    width: 400px;
 }
