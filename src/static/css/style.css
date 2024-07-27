@@ -14,6 +14,8 @@
         "Helvetica Neue", "Segoe UI", Roboto,
         "Hiragino Kaku Gothic ProN", "Hiragino Sans", "BIZ UDGothic", Meiryo, sans-serif;
 
+    --background-color: #f3f3f3;
+
     --primary: #1b84ff;
     --primary-active: #056ee9;
 
@@ -50,7 +52,7 @@
 }
 
 /* =======================================================================================
-   Overall element style.
+   Main element style.
    ======================================================================================= */
 
 *,
@@ -65,6 +67,7 @@ body {
     font-weight: var(--font-weight);
     line-height: var(--line-height);
     color: var(--text-color);
+    background-color: var(--background-color);
 }
 
 * {

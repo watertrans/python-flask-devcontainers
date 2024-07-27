@@ -22,21 +22,21 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="form-label">
+        <label class="form-label" for="email">
           Email
         </label>
-        <input class="form-control" name="email" placeholder="email@example.com" type="text" id="email" value="">
+        <input class="form-control" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="">
       </div>
       <div class="form-group">
         <div class="flex items-center justify-between gap-1">
-          <label class="form-label">
+          <label class="form-label" for="password">
             Password
           </label>
           <a class="text-sm link flex-shrink-0" href="{{ url_for('pages.reset_password') }}">
             Forgot Password?
           </a>
         </div>
-        <input class="form-control" name="password" placeholder="Enter Password" type="password" id="password" value="">
+        <input class="form-control" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="">
       </div>
       <div class="form-group">
         <div class="form-check">
