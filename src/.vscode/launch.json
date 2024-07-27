@@ -8,6 +8,7 @@
             "module": "flask",
             "console": "integratedTerminal",
             "env": {
+                "LOG_LEVEL": "INFO",
                 "FLASK_APP": "app.py",
                 "FLASK_DEBUG": "1"
             },

@@ -1,7 +1,5 @@
 from flask import Blueprint, render_template, abort, request, jsonify, g
-from log_setup import setup_logger
 
-logger = setup_logger(__name__)
 bp = Blueprint("errors", __name__)
 
 

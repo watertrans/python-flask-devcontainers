@@ -20,7 +20,10 @@ This is a template project for development in python.
 - Start debugging using the `F5` key.
 
 ## Build
-`docker build --tag python-devcontainers .`
+Access WSL via terminal, set the src folder as the working directory, and execute the following.  
+`docker build --tag python-flask-devcontainers .`
 
 ## Run
-`docker run -it --rm python-devcontainers`
+Access WSL via terminal, set the src folder as the working directory, and execute the following.
+`docker run -p 80:80 -it --rm python-flask-devcontainers`  
+**Note:** You need to change the host's port 80 to an available port.

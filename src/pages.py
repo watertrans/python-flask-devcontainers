@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template
-from log_setup import setup_logger
+from flask import current_app
 
-logger = setup_logger(__name__)
 bp = Blueprint("pages", __name__)
 
 
 @bp.route("/")
 @bp.route("/home")
 def home():
+    current_app.logger.info("This is sample log")
     return render_template("pages/home.html")
 
 
