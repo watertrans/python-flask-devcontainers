@@ -4,7 +4,7 @@ from flask import current_app
 bp = Blueprint("pages", __name__)
 
 
-@bp.route("/")
+@bp.route("/", endpoint="root")
 @bp.route("/home")
 def home():
     current_app.logger.info("This is sample log")

@@ -40,6 +40,9 @@
     --text-color: #252525;
     --outline-color: #a4a2d3;
 
+    --nav-hover-bg-color: #fff;
+    --nav-active-bg-color: #dfdfdf;
+
     --form-text-color: #252525;
     --form-border-color: #cccccc;
     --form-bg-color: #fff;
@@ -2105,6 +2108,42 @@ input[type="search"]::-webkit-calendar-picker-indicator {
 
 .break-all {
     word-break: break-all;
+}
+
+/* =======================================================================================
+   Navigation header classes inspired by the style of Bootstrap CSS.
+   ======================================================================================= */
+
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    display: inline-block;
+    flex-grow: 1;
+    text-align: center;
+    padding: .5rem .5rem;
+    border-radius: .375rem;
+}
+
+.nav-item:hover {
+    background-color: var(--nav-hover-bg-color);
+}
+
+.nav-item.active {
+    background-color: var(--nav-active-bg-color);
+}
+
+.nav-link {
+    display: block;
+    text-decoration: none;
 }
 
 /* =======================================================================================

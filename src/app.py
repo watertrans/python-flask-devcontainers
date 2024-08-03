@@ -1,5 +1,6 @@
 from errors import bp as errors_bp
 from pages import bp as pages_bp
+from context_processor import utility_processor
 from flask import Flask
 from flask.logging import default_handler
 import logging as log
@@ -107,4 +108,6 @@ app.logger.removeHandler(default_handler)
 app.register_blueprint(pages_bp)
 app.register_blueprint(errors_bp)
 setup_logger(app)
+app.context_processor(utility_processor)
+
 app.logger.info("App started.")
