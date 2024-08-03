@@ -17,14 +17,27 @@ class LogfmtFormatter(log.Formatter):
         log_record = (
             f"time={self.formatTime(record, self.datefmt)} "
             f"level={record.levelname} "
-            f"message=\"{record.getMessage().replace(
-                '"', '\\"').replace("\n", "\\n")}\" "
+            f"message={self.escape_message(record.getMessage())} "
             f"name={record.name} "
             f"file={record.filename} "
             f"func={record.funcName} "
             f"lineno={record.lineno}"
         )
+
+        if record.exc_info:
+            log_record += f" exception={self.escape_message(
+                self.formatException(record.exc_info))}"
+
         return log_record
+
+    def escape_message(self, message: str):
+        """
+        Escapes newline characters and double quotes.
+        """
+        if not message:
+            return message
+        else:
+            return '"' + message.replace('"', '\\"').replace("\n", "\\n") + '"'
 
 
 class JsonFormatter(log.Formatter):
@@ -41,6 +54,10 @@ class JsonFormatter(log.Formatter):
             "func": record.funcName,
             "lineno": record.lineno,
         }
+
+        if record.exc_info:
+            log_record["exception"] = self.formatException(record.exc_info)
+
         return json.dumps(log_record, ensure_ascii=False)
 
 

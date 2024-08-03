@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
+        "accesslog",
         "devcontainers",
+        "Gunicorn",
         "jsonify",
         "levelname",
         "levelno",
