@@ -9,6 +9,7 @@
             "console": "integratedTerminal",
             "env": {
                 "LOG_LEVEL": "INFO",
+                "SECRET_KEY": "debugger_secret_key",
                 "FLASK_APP": "app.py",
                 "FLASK_ENV": "development",
                 "FLASK_DEBUG": "1"

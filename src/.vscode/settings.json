@@ -8,7 +8,8 @@
         "levelno",
         "Logfmt",
         "signin",
-        "signup"
+        "signup",
+        "sqlalchemy"
     ],
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.inlayHints.functionReturnTypes": true,

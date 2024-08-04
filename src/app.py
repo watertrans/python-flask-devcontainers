@@ -3,6 +3,8 @@ from pages import bp as pages_bp
 from context_processor import utility_processor
 from flask import Flask
 from flask.logging import default_handler
+from flask_session import Session
+from flask_sqlalchemy import SQLAlchemy
 import logging as log
 import datetime
 import sys
@@ -71,7 +73,7 @@ def format_log_time(record: log.LogRecord, datefmt: str | None = None):
 
 def setup_logger(app: Flask):
     """
-    This function sets and returns the logger.
+    Sets up the logger.
     """
 
     # Set log output format
@@ -103,11 +105,33 @@ def setup_logger(app: Flask):
     app.logger.addHandler(stderr_handler)
 
 
+def setup_session(app: Flask):
+    """
+    Sets up the session.
+    """
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sessions.db'
+    app.config['SESSION_TYPE'] = 'sqlalchemy'
+    app.config['SESSION_PERMANENT'] = False
+    app.config['SESSION_USE_SIGNER'] = True
+    app.config['SESSION_KEY_PREFIX'] = 'session:'
+
+    db = SQLAlchemy(app)
+    app.config['SESSION_SQLALCHEMY'] = db
+    Session(app)
+
+    with app.app_context():
+        db.create_all()
+
+
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 app.logger.removeHandler(default_handler)
 app.register_blueprint(pages_bp)
 app.register_blueprint(errors_bp)
-setup_logger(app)
 app.context_processor(utility_processor)
+
+setup_logger(app)
+setup_session(app)
 
 app.logger.info("App started.")
