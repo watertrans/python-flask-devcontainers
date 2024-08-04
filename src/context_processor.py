@@ -6,4 +6,11 @@ def utility_processor():
             return "active"
         else:
             return ""
-    return dict(is_active=is_active)
+
+    def is_disabled(expression: bool) -> str:
+        """ If the expression is true, return disabled. """
+        if expression:
+            return "disabled"
+        else:
+            return ""
+    return dict(is_active=is_active, is_disabled=is_disabled)

@@ -2115,7 +2115,6 @@ input[type="search"]::-webkit-calendar-picker-indicator {
    ======================================================================================= */
 
 .navbar {
-    position: relative;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -2126,11 +2125,11 @@ input[type="search"]::-webkit-calendar-picker-indicator {
 }
 
 .nav-item {
-    display: inline-block;
-    flex-grow: 1;
+    display: block;
+    flex: 1;
     text-align: center;
-    padding: .5rem .5rem;
     border-radius: .375rem;
+    margin: .25rem;
 }
 
 .nav-item:hover {
@@ -2143,6 +2142,7 @@ input[type="search"]::-webkit-calendar-picker-indicator {
 
 .nav-link {
     display: block;
+    padding: .25rem;
     text-decoration: none;
 }
 
