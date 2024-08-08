@@ -7,7 +7,7 @@
 {% block content %}
 <div class="flex items-center justify-center grow">
   <div class="card card-signin">
-    <form action="#" class="card-body flex flex-col" method="get">
+    <form action="{{ url_for('pages.signin') }}" class="card-body flex flex-col" method="post">
       <div class="text-center">
         <h3>
           Sign in
@@ -25,7 +25,10 @@
         <label class="form-label" for="email">
           Email
         </label>
-        <input class="form-control" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="">
+        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="{{ form.email.data }}">
+        {% for error in form.email.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
       <div class="form-group">
         <div class="flex items-center justify-between gap-1">
@@ -36,7 +39,10 @@
             Forgot Password?
           </a>
         </div>
-        <input class="form-control" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="">
+        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}">
+        {% for error in form.password.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
       <div class="form-group">
         <div class="form-check">
@@ -46,7 +52,7 @@
           </label>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary flex justify-center grow mt-2">
+      <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-2" value="1">
         Sign In
       </button>
     </form>

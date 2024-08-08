@@ -43,6 +43,10 @@
     --nav-hover-bg-color: #fff;
     --nav-active-bg-color: #dfdfdf;
 
+    --form-valid-color: #198754;
+    --form-invalid-color: #dc3545;
+    --form-valid-border-color: #198754;
+    --form-invalid-border-color: #dc3545;
     --form-text-color: #252525;
     --form-border-color: #cccccc;
     --form-bg-color: #fff;
@@ -2150,6 +2154,16 @@ input[type="search"]::-webkit-calendar-picker-indicator {
    Form classes inspired by the style of Bootstrap CSS.
    ======================================================================================= */
 
+.valid-feedback {
+    font-size: .75em;
+    color: var(--form-valid-color);
+}
+
+.invalid-feedback {
+    font-size: .75em;
+    color: var(--form-invalid-color);
+}
+
 .form-group {
     margin-bottom: 0.5rem;
 }
@@ -2203,6 +2217,14 @@ input[type="search"]::-webkit-calendar-picker-indicator {
 
 .form-control[type=file]:not(:disabled):not([readonly]) {
     cursor: pointer;
+}
+
+.form-control.is-invalid {
+    border-color: var(--form-invalid-border-color);
+}
+
+.form-control.is-valid {
+    border-color: var(--form-valid-border-color);
 }
 
 .form-select {

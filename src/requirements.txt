@@ -2,6 +2,8 @@ flask
 flask-jwt-extended
 flask-session
 flask-sqlalchemy
+flask-wtf
 gunicorn
 pytest
 requests
+wtforms

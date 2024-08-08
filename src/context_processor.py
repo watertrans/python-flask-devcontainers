@@ -13,4 +13,18 @@ def utility_processor():
             return "disabled"
         else:
             return ""
-    return dict(is_active=is_active, is_disabled=is_disabled)
+
+    def is_valid(expression: bool) -> str:
+        """ If the expression is true, return is-valid. """
+        if expression:
+            return "is-valid"
+        else:
+            return ""
+
+    def is_invalid(expression: bool) -> str:
+        """ If the expression is true, return is-invalid. """
+        if expression:
+            return "is-invalid"
+        else:
+            return ""
+    return dict(is_active=is_active, is_disabled=is_disabled, is_valid=is_valid, is_invalid=is_invalid, )
