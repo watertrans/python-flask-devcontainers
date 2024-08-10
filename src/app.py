@@ -85,6 +85,8 @@ def setup_config(app: Flask):
         config: dict[str, Any] = yaml.safe_load(file)
         app.config.update(config)
 
+    app.config.from_prefixed_env()
+
 
 def setup_logger(app: Flask):
     """
