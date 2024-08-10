@@ -24,6 +24,6 @@ Access WSL via terminal, set the src folder as the working directory, and execut
 `docker build --tag python-flask-devcontainers .`
 
 ## Run
-Access WSL via terminal, set the src folder as the working directory, and execute the following.
+Access WSL via terminal, set the src folder as the working directory, and execute the following.  
 `docker run -p 80:8000 -it --rm python-flask-devcontainers`  
 **Note:** You need to change the host's port 80 to an available port.
