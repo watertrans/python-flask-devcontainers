@@ -2326,6 +2326,10 @@ input[type="search"]::-webkit-calendar-picker-indicator {
     background-color: var(--secondary-active);
 }
 
+/* =======================================================================================
+   Card classes inspired by the style of Bootstrap CSS.
+   ======================================================================================= */
+
 .card {
     display: flex;
     flex-direction: column;
