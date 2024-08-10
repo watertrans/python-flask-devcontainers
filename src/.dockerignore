@@ -1,5 +1,8 @@
 __pycache__
 .devcontainer
-.vscode
+.dockerignore
+.env
 .git
+.vscode
 Dockerfile
+instance

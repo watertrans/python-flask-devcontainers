@@ -1,7 +1,9 @@
 {
     "cSpell.words": [
         "accesslog",
+        "autoparams",
         "devcontainers",
+        "dotenv",
         "Gunicorn",
         "jsonify",
         "levelname",
@@ -10,19 +12,16 @@
         "signin",
         "signup",
         "sqlalchemy",
+        "supabase",
         "werkzeug",
         "wtforms"
     ],
-    "python.analysis.typeCheckingMode": "strict",
-    "python.analysis.inlayHints.functionReturnTypes": true,
-    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.diagnosticSeverityOverrides": {},
     "python.analysis.inlayHints.callArgumentNames": "partial",
+    "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.pytestParameters": true,
-    "python.analysis.diagnosticSeverityOverrides": {
-        "reportUnknownVariableType": false,
-        "reportUnknownArgumentType": false,
-        "reportUnknownMemberType": false
-    },
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.typeCheckingMode": "basic",
     "[python]": {
         "editor.defaultFormatter": "ms-python.autopep8",
         "editor.formatOnSave": true

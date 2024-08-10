@@ -4,6 +4,9 @@ flask-session
 flask-sqlalchemy
 flask-wtf
 gunicorn
+inject
 pytest
+python-dotenv
+pyyaml
 requests
 wtforms

@@ -1,8 +1,11 @@
-import json
-from flask import Blueprint, render_template, redirect, request, session, url_for
+from flask import Blueprint, Config, render_template, redirect, request, session, url_for
 from flask import current_app
 from forms import *
 from werkzeug.datastructures import MultiDict
+import inject
+import json
+
+from services import AuthService
 
 bp = Blueprint("pages", __name__)
 
@@ -36,12 +39,17 @@ def signin():
 
 
 @bp.route("/signin", methods=["POST"])
-def signin_post():
+@inject.autoparams()
+def signin_post(auth_service: AuthService):
     form: SigninForm = SigninForm(request.form)
     if not form.validate():
         session["signin_input"] = json.dumps(request.form)
         return redirect(url_for("pages.signin"))
     session["signin_input"] = None
+
+    current_app.logger.info(auth_service.auth(
+        form.email.data or "", form.password.data or ""))
+
     return redirect(url_for("pages.signin"))
 
 

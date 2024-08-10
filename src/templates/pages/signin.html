@@ -16,7 +16,7 @@
           <span class="text-sm text-gray-6">
             Don't have an account?
           </span>
-          <a class="text-sm link ml-1" href="{{ url_for('pages.signup') }}">
+          <a class="text-sm link ml-1" href="{{ url_for('pages.signup') }}" tabindex="5">
             Sign up
           </a>
         </div>
@@ -25,7 +25,7 @@
         <label class="form-label" for="email">
           Email
         </label>
-        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="{{ form.email.data }}">
+        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="{{ form.email.data }}" inputmode="email" tabindex="1">
         {% for error in form.email.errors %}
         <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}
@@ -35,24 +35,24 @@
           <label class="form-label" for="password">
             Password
           </label>
-          <a class="text-sm link flex-shrink-0" href="{{ url_for('pages.reset_password') }}">
+          <a class="text-sm link flex-shrink-0" href="{{ url_for('pages.reset_password') }}" tabindex="6">
             Forgot Password?
           </a>
         </div>
-        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}">
+        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}" tabindex="2">
         {% for error in form.password.errors %}
         <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}
       </div>
       <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" name="check" type="checkbox" id="remember_me" value="1">
+          <input class="form-check-input" name="check" type="checkbox" id="remember_me" value="1" tabindex="3">
           <label class="form-check-label" for="remember_me">
             Remember me
           </label>
         </div>
       </div>
-      <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-2" value="1">
+      <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-2" value="1" tabindex="4">
         Sign In
       </button>
     </form>
