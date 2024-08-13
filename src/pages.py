@@ -41,10 +41,15 @@ def signin():
         form.validate()
     else:
         form = SigninForm(request.args)
+        email = session.get("signin_email", "")
+        if email:
+            form.email.data = email
+            form.remember_me.data = False
         email = request.cookies.get("signin_email")
         if email:
             form.email.data = email
             form.remember_me.data = True
+
     return render_template("pages/signin.html", form=form, localized=messages)
 
 
@@ -327,7 +332,56 @@ def enroll_verify_post(auth_service: AuthService):
 
 @bp.route("/signup")
 def signup():
-    return render_template("pages/signup.html")
+    """ Displays the sign-up screen. """
+    signup_input = session.get("signup_input", None)
+    if signup_input:
+        session["signup_input"] = None
+        form: SignupForm = SignupForm(MultiDict(json.loads(signup_input)))
+        form.validate()
+    else:
+        form = SignupForm(request.args)
+    return render_template("pages/signup.html", form=form, localized=messages)
+
+
+@bp.route("/signup", methods=["POST"])
+@inject.autoparams()
+def signup_post(auth_service: AuthService):
+    """ Handles the postback of the sign-up screen. """
+    form: SignupForm = SignupForm(request.form)
+    if not form.validate():
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
+        session["signup_input"] = json.dumps(request.form)
+        return redirect(url_for("pages.signup"))
+
+    auth_result, signup_info = auth_service.sign_up(
+        form.email.data or "", form.password.data or "")
+
+    if auth_result == AuthResult.CONFIRM_EMAIL:
+        session["signup_input"] = None
+        session["signin_email"] = form.email.data or ""
+        return redirect(url_for("pages.confirm_signup"))
+    elif auth_result == AuthResult.SUCCESS:
+        session["signup_input"] = None
+        session["signin_email"] = form.email.data or ""
+        flash(messages.FORM_SIGNUP_SUCCESS_ALERT, "success")
+        return redirect(url_for("pages.sign_in"))
+    elif auth_result == AuthResult.FAILURE:
+        flash(messages.FORM_AUTH_FAILURE_ALERT, "warning")
+    elif auth_result == AuthResult.UNAVAILABLE:
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
+    else:
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
+
+    session["signup_input"] = json.dumps(request.form)
+    return redirect(url_for("pages.signup"))
+
+
+@bp.route("/confirm-signup", methods=["GET"])
+def confirm_signup():
+    return render_template("pages/confirm_signup.html", localized=messages)
 
 
 @bp.route("/reset-password")

@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}localized.SCREEN_2FA_ENROLL{% endblock title %}
+{% block title %}{{ localized.SCREEN_2FA_ENROLL }}{% endblock title %}
 
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
@@ -26,7 +26,7 @@
         <label class="form-label" for="code">
           {{ localized.FORM_LABEL_FACTOR_NAME }}
         </label>
-        <input class="form-control {{ is_invalid(form.friendly_name.errors) }}" name="friendly_name" autocomplete="off" type="text" id="friendly_name" value="{{ form.friendly_name.data }}" tabindex="1">
+        <input class="form-control {{ is_invalid(form.friendly_name.errors) }}" name="friendly_name" placeholder="{{ localized.PLACEHOLDER_FACTOR_NAME }}" autocomplete="off" type="text" id="friendly_name" value="{{ form.friendly_name.data }}" tabindex="1">
         {% for error in form.friendly_name.errors %}
         <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}

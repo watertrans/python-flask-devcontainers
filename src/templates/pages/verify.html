@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}localized.SCREEN_2FA_VERIFY{% endblock title %}
+{% block title %}{{ localized.SCREEN_2FA_VERIFY }}{% endblock title %}
 
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
@@ -49,7 +49,7 @@
       </div>
       <div class="text-center">
         <div class="text-sm text-gray-6">
-          {{ _("Can't use your Authenticator app? Contact support.") }}
+          {{ _("Can't use your authenticator app? Contact support.") }}
         </div>
       </div>
       <button type="submit" name="verify" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="3">

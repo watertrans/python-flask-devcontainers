@@ -11,6 +11,7 @@ import os
 
 class CSRFForm(Form):
     csrf_token: CSRFTokenField
+
     class Meta:
         csrf = True
         csrf_class = SessionCSRF
@@ -27,6 +28,18 @@ class SigninForm(CSRFForm):
         DataRequired(messages.FORM_FIELD_REQUIRED),
         Regexp("^[\x21-\x7e]+$", message=messages.FROM_PASSWORD_INVALID_CHARACTERS)], default="")
     remember_me = BooleanField(messages.FORM_LABEL_REMEMBER_ME)
+    signin = SubmitField(messages.FORM_LABEL_SIGNIN)
+
+
+class SignupForm(CSRFForm):
+    email = StringField(messages.FORM_LABEL_EMAIL, [DataRequired(messages.FORM_FIELD_REQUIRED)], default="")
+    password = PasswordField(messages.FORM_LABEL_PASSWORD, validators=[
+        DataRequired(messages.FORM_FIELD_REQUIRED),
+        Regexp("^[\x21-\x7e]+$", message=messages.FROM_PASSWORD_INVALID_CHARACTERS)], default="")
+    confirm_password = PasswordField(messages.FORM_LABEL_CONFIRM_PASSWORD, validators=[
+        DataRequired(messages.FORM_FIELD_REQUIRED),
+        EqualTo("password", messages.FORM_PASSWORD_MISMATCH)], default="")
+    accept_terms = BooleanField(messages.FORM_LABEL_ACCEPT_TERMS, [DataRequired(messages.FORM_ACCEPT_TERMS_REQUIRED)])
     signin = SubmitField(messages.FORM_LABEL_SIGNIN)
 
 

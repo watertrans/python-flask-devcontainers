@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}localized.SCREEN_2FA_ENROLL_VERIFY{% endblock title %}
+{% block title %}{{ localized.SCREEN_2FA_ENROLL_VERIFY }}{% endblock title %}
 
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
@@ -18,7 +18,7 @@
         {% endfor %}{% endif %}{% endwith %}
         <div class="flex flex-col items-center justify-center">
           <span class="text-sm text-gray-6">
-            {{ _("Scan the QR code with your Authenticator app.") }}
+            {{ _("Scan the QR code with your authenticator app.") }}
           </span>
           <img src="{{ view.qr_code }}" alt="{{ view.uri }}" layout="fill">
           <span class="text-sm text-gray-6">

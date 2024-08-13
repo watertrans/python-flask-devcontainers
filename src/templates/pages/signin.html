@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}localized.SCREEN_SIGNIN{% endblock title %}
+{% block title %}{{ localized.SCREEN_SIGNIN }}{% endblock title %}
 
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
@@ -19,7 +19,7 @@
         <div class="flex flex-col items-center justify-center">
           <span class="text-sm text-gray-6">
             {{ _("Don't have an account?") }}
-            <a class="link" href="{{ url_for('pages.signup') }}" tabindex="5">
+            <a class="text-sm link" href="{{ url_for('pages.signup') }}" tabindex="5">
               {{ localized.FORM_LABEL_SIGNUP }}
             </a>
           </span>
@@ -29,13 +29,13 @@
         <label class="form-label" for="email">
           {{ localized.FORM_LABEL_EMAIL }}
         </label>
-        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="{{ form.email.data }}" inputmode="email" tabindex="1">
+        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="{{ localized.PLACEHOLDER_EMAIL }}" autocomplete="email" type="text" id="email" value="{{ form.email.data }}" inputmode="email" tabindex="1">
         {% for error in form.email.errors %}
         <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}
       </div>
       <div class="form-group">
-        <div class="flex items-center justify-between gap-1">
+        <div class="flex items-center justify-between">
           <label class="form-label" for="password">
             {{ localized.FORM_LABEL_PASSWORD }}
           </label>
@@ -43,7 +43,7 @@
             {{ localized.FORM_LABEL_FORGOT_PASSWORD }}
           </a>
         </div>
-        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}" tabindex="2">
+        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="{{ localized.PLACEHOLDER_PASSWORD }}" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}" tabindex="2">
         {% for error in form.password.errors %}
         <div class="invalid-feedback">{{ error }}</div>
         {% endfor %}

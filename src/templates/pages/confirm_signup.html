@@ -1,0 +1,27 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ localized.SCREEN_CONFIRM_SIGNUP }}{% endblock title %}
+
+{% block content %}
+<div class="flex items-center justify-center flex-grow">
+  <div class="card card-auth card-confirm-signup">
+    <form action="{{ url_for('pages.signin') }}" class="card-body flex flex-col" method="get">
+      <div class="text-center mb-5">
+        <h3>
+          {{ localized.SCREEN_CONFIRM_SIGNUP }}
+        </h3>
+        <div class="flex items-center justify-center">
+          <span class="text-sm text-gray-6">
+            {{ _("A confirmation email has been sent to the email address you provided.") }}<br><br>
+            {{ _("Please check your inbox to complete the process.") }}<br>
+            {{ _("Once confirmed, you will be able to sign in.") }}
+          </span>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary flex justify-center grow mt-5" tabindex="1">
+        {{ localized.FORM_LABEL_SIGNIN }}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

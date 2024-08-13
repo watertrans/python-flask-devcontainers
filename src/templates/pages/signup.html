@@ -1,52 +1,70 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}localized.SCREEN_SIGNUP{% endblock title %}
+{% block title %}{{ localized.SCREEN_SIGNUP }}{% endblock title %}
 
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
   <div class="card card-auth card-signup">
-    <form action="#" class="card-body flex flex-col" method="get">
-      <div class="text-center">
+    <form action="{{ url_for('pages.signup') }}" class="card-body flex flex-col" method="post">
+      {{ form.csrf_token }}
+      <div class="text-center mb-5">
         <h3>
-          Sign up
+          {{ localized.SCREEN_SIGNUP }}
         </h3>
-        <div class="flex items-center justify-center">
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}{% endif %}{% endwith %}
+        <div class="flex flex-col items-center justify-center">
           <span class="text-sm text-gray-6">
-            Already have an account?
+            {{ _("Already have an account?") }}
+            <a class="text-sm link" href="{{ url_for('pages.signin') }}">
+              {{ localized.FORM_LABEL_SIGNIN }}
+            </a>
           </span>
-          <a class="text-sm link" href="{{ url_for('pages.signin') }}">
-            Sign in
-          </a>
         </div>
       </div>
       <div class="form-group">
         <label class="form-label" for="email">
-          Email
+          {{ localized.FORM_LABEL_EMAIL }}
         </label>
-        <input class="form-control" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="">
+        <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="{{ localized.PLACEHOLDER_EMAIL }}" autocomplete="email" type="text" id="email" value="{{ form.email.data }}" inputmode="email" tabindex="1">
+        {% for error in form.email.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
       <div class="form-group">
         <label class="form-label" for="password">
-          Password
+          {{ localized.FORM_LABEL_PASSWORD }}
         </label>
-        <input class="form-control" name="password" placeholder="Enter Password" autocomplete="new-password" type="password" id="password" value="">
+        <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="{{ localized.PLACEHOLDER_PASSWORD }}" autocomplete="new-password" type="password" id="password" value="{{ form.password.data }}" tabindex="2">
+        {% for error in form.password.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
       <div class="form-group">
-        <label class="form-label" for="password2">
-          Confirm Password
+        <label class="form-label" for="confirm_password">
+          {{ localized.FORM_LABEL_CONFIRM_PASSWORD }}
         </label>
-        <input class="form-control" name="password2" placeholder="Re-enter Password" autocomplete="new-password" type="password" id="password2" value="">
+        <input class="form-control {{ is_invalid(form.confirm_password.errors) }}" name="confirm_password" placeholder="{{ localized.PLACEHOLDER_CONFIRM_PASSWORD }}" type="password" id="confirm_password" value="{{ form.confirm_password.data }}" tabindex="3">
+        {% for error in form.confirm_password.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
       <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" name="check" type="checkbox" id="remember_me" value="1">
-          <label class="form-check-label" for="remember_me">
-            I accept <a class="link" href="#">Terms & Conditions</a>
+          <input class="form-check-input" name="accept_terms" type="checkbox" id="accept_terms" value="true" tabindex="4" {{ is_checked(form.accept_terms.data) }}>
+          <label class="form-check-label" for="accept_terms">
+            {{ _("I accept") }}<a class="link ml-1" href="#">{{ _("Terms & Conditions") }}</a>
           </label>
         </div>
+        {% for error in form.accept_terms.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
       </div>
-      <button type="submit" class="btn btn-primary flex justify-center grow mt-2">
-        Sign up
+      <button type="submit" name="signup" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="5">
+        {{ localized.FORM_LABEL_SIGNUP }}
       </button>
     </form>
   </div>

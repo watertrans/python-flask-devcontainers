@@ -33,6 +33,10 @@ class AuthService:
         """ Retrieves the current authenticated user's information. """
         return self.auth_client.get_user()
 
+    def sign_up(self, email: str, password: str):
+        """ Sign-up process by creating a new user. """
+        return self.auth_client.sign_up(email, password)
+
     def auth(self, email: str, password: str):
         """ Authenticates using an email and password. """
         return self.auth_client.auth(email, password)

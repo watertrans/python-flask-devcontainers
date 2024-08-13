@@ -35,6 +35,7 @@ class AuthResult(Enum):
     TIMEOUT = "timeout"
     UNAVAILABLE = "unavailable"
     ERROR = "error"
+    CONFIRM_EMAIL = "confirm_email"
 
 
 class AssuranceLevel(Enum):
@@ -51,6 +52,13 @@ class AuthUserInfo:
         self.aal_current = aal_current
         self.aal_next = aal_next
         self.factors: List[AuthUserFactorInfo] = []
+
+
+class AuthSignUpInfo:
+    """ Represents the sing-up information of an user. """
+
+    def __init__(self, id: str):
+        self.id = id
 
 
 class AuthUserFactorInfo:
@@ -153,6 +161,35 @@ class AuthClient:
                 if e.message.startswith("Invalid Refresh Token"):
                     return (AuthResult.TIMEOUT, None)
                 elif e.status == 400:
+                    return (AuthResult.FAILURE, None)
+                else:
+                    self.logger.exception(msg=e.message)
+                    return (AuthResult.ERROR, None)
+        self.logger.error(
+            "Operation failed after several attempts. Please check your Supabase service.")
+        return (AuthResult.UNAVAILABLE, None)
+
+    def sign_up(self, email: str, password: str) -> tuple[AuthResult, AuthSignUpInfo | None]:
+        """ Sign-up process by creating a new user. """
+        supabase = self.get_auth_client()
+        retry_attempts = 5
+        for attempt in range(retry_attempts):
+            try:
+                response = supabase.auth.sign_up({"email": email, "password": password})
+                assert response.user is not None
+                signup_info = AuthSignUpInfo(response.user.id)
+
+                if response.session is None:
+                    return (AuthResult.CONFIRM_EMAIL, signup_info)
+                else:
+                    return (AuthResult.SUCCESS, signup_info)
+
+            except AuthRetryableError as e:
+                self.logger.warn(
+                    f"Attempt {attempt + 1} failed with retryable error: {e}")
+                time.sleep(2 ** attempt)
+            except AuthApiError as e:
+                if e.status == 400:
                     return (AuthResult.FAILURE, None)
                 else:
                     self.logger.exception(msg=e.message)
