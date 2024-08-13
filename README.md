@@ -15,6 +15,7 @@ Using the following modules:
 
 - **Python 3.12**
 - **Flask:** A lightweight wep application framework.
+- **Flask-Babel:** An extension to Flask that adds internationalization (i18n) support.
 - **Flask-Session:** Provides support for server-side sessions.
 - **Flask-SQLAlchemy:** A SQL toolkit and Object-Relational Mapper (ORM).
 - **Flask-WTF:** A flexible library for form validation and rendering.
