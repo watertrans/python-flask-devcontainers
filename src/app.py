@@ -146,9 +146,10 @@ def setup_container(binder: inject.Binder):
     Sets up the dependency injection container.
     """
 
-    auth_client = AuthClient(app.config)
-    auth_service = AuthService(app.config, auth_client)
+    auth_client = AuthClient(app.logger, app.config)
+    auth_service = AuthService(app.logger, app.config, auth_client)
 
+    binder.bind(log.Logger, app.logger)
     binder.bind(Config, app.config)
     binder.bind(AuthClient, auth_client)
     binder.bind(AuthService, auth_service)

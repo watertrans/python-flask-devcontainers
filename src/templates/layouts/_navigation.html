@@ -15,8 +15,5 @@
     <li class="nav-item {{ is_active(request.path == url_for('pages.signup')) }}">
       <a class="nav-link" href="{{ url_for('pages.signup') }}">Sign up</a>
     </li>
-    <li class="nav-item {{ is_active(request.path == url_for('pages.reset_password')) }}">
-      <a class="nav-link" href="{{ url_for('pages.reset_password') }}">Reset Password</a>
-    </li>
   </ul>
 </nav>

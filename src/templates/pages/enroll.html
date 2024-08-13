@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% block header %}
+<h1>{% block title %}ENROLL{% endblock title %}</h1>
+{% endblock header %}
+
+{% block content %}
+<div class="flex items-center justify-center grow">
+  <div class="card card-enroll">
+    <form action="{{ url_for('pages.enroll') }}" class="card-body flex flex-col" method="post">
+      <div class="text-center mb-5">
+        <h3>
+          Enroll factor
+        </h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}{% endif %}{% endwith %}
+        <div class="flex items-center justify-center">
+          <span class="text-sm text-gray-6">
+            Give a name to the factor to be registered.
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="code">
+          Name
+        </label>
+        <input class="form-control {{ is_invalid(form.friendly_name.errors) }}" name="friendly_name" autocomplete="off" type="text" id="friendly_name" value="{{ form.friendly_name.data }}" tabindex="1">
+        {% for error in form.friendly_name.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <button type="submit" name="enroll" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="2">
+        Enroll
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}

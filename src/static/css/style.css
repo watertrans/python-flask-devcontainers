@@ -114,6 +114,18 @@ input[type="search"]::-webkit-calendar-picker-indicator {
    Individual element classes specific to the application.
    ======================================================================================= */
 
+.card-enroll {
+    width: 400px;
+}
+
+.card-enroll-verify {
+    width: 400px;
+}
+
+.card-reset-password {
+    width: 400px;
+}
+
 .card-signin {
     width: 400px;
 }
@@ -122,9 +134,11 @@ input[type="search"]::-webkit-calendar-picker-indicator {
     width: 400px;
 }
 
-.card-reset-password {
+.card-verify {
     width: 400px;
 }
+
+
 
 /* =======================================================================================
    Layout classes inspired by the style of Tailwind CSS.
@@ -2366,4 +2380,36 @@ input[type="search"]::-webkit-calendar-picker-indicator {
     justify-content: space-between;
     border-top: var(--card-border);
     padding: .75rem 1.875rem;
+}
+
+/* =======================================================================================
+   Alert classes inspired by the style of Bootstrap CSS.
+   ======================================================================================= */
+
+.alert {
+    display: block;
+    position: relative;
+    padding: .5rem .75rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .375rem;
+    font-size: .875rem;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
 }

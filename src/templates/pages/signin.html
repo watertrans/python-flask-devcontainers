@@ -8,17 +8,22 @@
 <div class="flex items-center justify-center grow">
   <div class="card card-signin">
     <form action="{{ url_for('pages.signin') }}" class="card-body flex flex-col" method="post">
-      <div class="text-center">
+      <div class="text-center mb-5">
         <h3>
           Sign in
         </h3>
-        <div class="flex items-center justify-center">
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}{% endif %}{% endwith %}
+        <div class="flex flex-col items-center justify-center">
           <span class="text-sm text-gray-6">
             Don't have an account?
+            <a class="link ml-1" href="{{ url_for('pages.signup') }}" tabindex="5">
+              Sign up
+            </a>
           </span>
-          <a class="text-sm link ml-1" href="{{ url_for('pages.signup') }}" tabindex="5">
-            Sign up
-          </a>
         </div>
       </div>
       <div class="form-group">
@@ -46,13 +51,13 @@
       </div>
       <div class="form-group">
         <div class="form-check">
-          <input class="form-check-input" name="check" type="checkbox" id="remember_me" value="1" tabindex="3">
+          <input class="form-check-input" name="remember_me" type="checkbox" id="remember_me" value="true" tabindex="3" {{ is_checked(form.remember_me.data) }}>
           <label class="form-check-label" for="remember_me">
             Remember me
           </label>
         </div>
       </div>
-      <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-2" value="1" tabindex="4">
+      <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="4">
         Sign In
       </button>
     </form>

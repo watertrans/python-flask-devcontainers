@@ -27,4 +27,12 @@ def utility_processor():
             return "is-invalid"
         else:
             return ""
-    return dict(is_active=is_active, is_disabled=is_disabled, is_valid=is_valid, is_invalid=is_invalid, )
+
+    def is_checked(expression: bool) -> str:
+        """ If the expression is true, return checked. """
+        if expression:
+            return "checked"
+        else:
+            return ""
+
+    return dict(is_active=is_active, is_disabled=is_disabled, is_valid=is_valid, is_invalid=is_invalid, is_checked=is_checked)

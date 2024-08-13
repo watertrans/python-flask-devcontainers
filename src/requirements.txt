@@ -9,4 +9,5 @@ pytest
 python-dotenv
 pyyaml
 requests
+supabase
 wtforms

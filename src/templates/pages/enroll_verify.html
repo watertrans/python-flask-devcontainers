@@ -1,0 +1,45 @@
+{% extends 'layouts/base.html' %}
+
+{% block header %}
+<h1>{% block title %}VERIFY{% endblock title %}</h1>
+{% endblock header %}
+
+{% block content %}
+<div class="flex items-center justify-center grow">
+  <div class="card card-enroll-verify">
+    <form action="{{ url_for('pages.enroll_verify') }}" class="card-body flex flex-col" method="post">
+      <div class="text-center mb-5">
+        <h3>
+          Enroll factor verification
+        </h3>
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+          {{ message }}
+        </div>
+        {% endfor %}{% endif %}{% endwith %}
+        <div class="flex flex-col items-center justify-center">
+          <span class="text-sm text-gray-6">
+            Scan the QR code with your Authenticator app.
+          </span>
+          <img src="{{ view.qr_code }}" alt="{{ view.uri }}" layout="fill">
+          <span class="text-sm text-gray-6">
+            Please enter the code from your authenticator app.
+          </span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="code">
+          Verification code
+        </label>
+        <input class="form-control {{ is_invalid(form.code.errors) }}" name="code" autocomplete="off" type="text" id="code" value="{{ form.code.data }}" inputmode="numeric" tabindex="1">
+        {% for error in form.code.errors %}
+        <div class="invalid-feedback">{{ error }}</div>
+        {% endfor %}
+      </div>
+      <button type="submit" name="verify" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="2">
+        Verify
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock content %}
