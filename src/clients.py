@@ -129,6 +129,8 @@ class AuthClient:
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.get_user()
+                if not response:
+                    return (AuthResult.FAILURE, None)
                 mfa_response = supabase.auth.mfa.get_authenticator_assurance_level()
                 assert response is not None
                 assert mfa_response.current_level is not None
