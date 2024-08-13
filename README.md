@@ -3,7 +3,15 @@ This repository serves as a template project for developing web applications usi
 It is built on [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers), making it easy to standardize the development environment across a team.  
 
 ## Features
-This template includes the following modules and features:
+This template has the following features:
+
+- Flask-based server-side rendered web application
+- Supabase user authentication and two-factor authentication
+- Supabase user registration and two-factor authentication registration
+- Supabase user password reset
+- Custom stylesheet similar to Tailwind CSS and Bootstrap CSS
+
+Using the following modules:
 
 - **Python 3.12**
 - **Flask:** A lightweight wep application framework.
@@ -31,6 +39,9 @@ This template includes the following modules and features:
 - Install the VS Code Docker extension.
 
 ## Develop
+To run this template, you will need the Supabase URL and KEY.  
+Please create a .env file following the instructions in config.yaml.  
+
 - Open the `src` folder in Visual Studio Code.
 - Use Command Palette (F1) and select `Dev Containers: Reopen in Container`.
 - Start debugging by pressing the `F5` key.
