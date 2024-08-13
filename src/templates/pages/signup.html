@@ -1,12 +1,10 @@
 {% extends 'layouts/base.html' %}
 
-{% block header %}
-<h1>{% block title %}SIGN UP{% endblock title %}</h1>
-{% endblock header %}
+{% block title %}localized.SCREEN_SIGNUP{% endblock title %}
 
 {% block content %}
-<div class="flex items-center justify-center grow">
-  <div class="card card-signup">
+<div class="flex items-center justify-center flex-grow">
+  <div class="card card-auth card-signup">
     <form action="#" class="card-body flex flex-col" method="get">
       <div class="text-center">
         <h3>
@@ -16,7 +14,7 @@
           <span class="text-sm text-gray-6">
             Already have an account?
           </span>
-          <a class="text-sm link ml-1" href="{{ url_for('pages.signin') }}">
+          <a class="text-sm link" href="{{ url_for('pages.signin') }}">
             Sign in
           </a>
         </div>

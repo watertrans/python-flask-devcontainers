@@ -8,6 +8,9 @@ SCREEN_FORGOT_PASSWORD = _("Forgot Password")
 SCREEN_RESET_PASSWORD = _("Reset Password")
 SCREEN_HOME = _("Home")
 SCREEN_ABOUT_US = _("About Us")
+SCREEN_2FA_VERIFY = _("Verify Two-Factor")
+SCREEN_2FA_ENROLL = _("Enroll Two-Factor")
+SCREEN_2FA_ENROLL_VERIFY = _("Verify enrolled Two-Factor")
 
 # For user label
 FORM_LABEL_USERNAME = _("Username")
@@ -34,6 +37,7 @@ FORM_LABEL_SIGNOUT = _("Sign Out")
 FORM_LABEL_VERIFY = _("Verify")
 FORM_LABEL_VERIFICATION_CODE = _("Verification code")
 FORM_LABEL_FACTOR = _("Factor")
+FORM_LABEL_FACTOR_NAME = _("Name")
 FORM_LABEL_ENROLL = _("Enroll")
 
 # For generic label

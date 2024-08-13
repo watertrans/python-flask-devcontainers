@@ -115,19 +115,17 @@ def verify(auth_service: AuthService):
         session["verify_input"] = None
         form: VerifyForm = VerifyForm(MultiDict(json.loads(verify_input)))
         for factor in user_info.factors:
-            form.factor.choices.append(  # type: ignore
-                (factor.id, factor.name))
+            form.factor.choices.append((factor.id, factor.name))  # type: ignore
         form.validate()
     else:
         form = VerifyForm(request.args)
         for factor in user_info.factors:
-            form.factor.choices.append(  # type: ignore
-                (factor.id, factor.name))
+            form.factor.choices.append((factor.id, factor.name))  # type: ignore
 
     if len(user_info.factors) == 1:
         form.factor.data = user_info.factors[0].id
 
-    return render_template("pages/verify.html", form=form)
+    return render_template("pages/verify.html", form=form, localized=messages)
 
 
 @bp.route("/verify", methods=["POST"])
@@ -148,8 +146,7 @@ def verify_post(auth_service: AuthService):
 
     form: VerifyForm = VerifyForm(request.form)
     for factor in user_info.factors:
-        form.factor.choices.append(  # type: ignore
-            (factor.id, factor.name))
+        form.factor.choices.append((factor.id, factor.name))  # type: ignore
 
     if not form.validate():
         if form.csrf_token.errors:
@@ -204,7 +201,7 @@ def enroll(auth_service: AuthService):
         form.validate()
     else:
         form = EnrollForm(request.args)
-    return render_template("pages/enroll.html", form=form)
+    return render_template("pages/enroll.html", form=form, localized=messages)
 
 
 @bp.route("/enroll", methods=["POST"])
@@ -270,7 +267,7 @@ def enroll_verify(auth_service: AuthService):
 
     view = {"qr_code": factor_qr_code, "uri": factor_uri}
 
-    return render_template("pages/enroll_verify.html", form=form, view=view)
+    return render_template("pages/enroll_verify.html", form=form, view=view, localized=messages)
 
 
 @bp.route("/enroll-verify", methods=["POST"])

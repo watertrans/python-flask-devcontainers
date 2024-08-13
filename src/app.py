@@ -3,6 +3,7 @@ from context_processor import utility_processor
 from dotenv import load_dotenv
 from errors import bp as errors_bp
 from flask import Config, Flask
+from flask_babel import Babel
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask.logging import default_handler
@@ -164,6 +165,7 @@ app.register_blueprint(pages_bp)
 app.register_blueprint(errors_bp)
 app.context_processor(utility_processor)
 
+babel = Babel(app)
 setup_config(app)
 setup_logger(app)
 setup_session(app)
