@@ -1,4 +1,5 @@
 flask
+flask-babel
 flask-jwt-extended
 flask-session
 flask-sqlalchemy

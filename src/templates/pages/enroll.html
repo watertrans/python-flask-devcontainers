@@ -8,6 +8,7 @@
 <div class="flex items-center justify-center grow">
   <div class="card card-enroll">
     <form action="{{ url_for('pages.enroll') }}" class="card-body flex flex-col" method="post">
+      {{ form.csrf_token }}
       <div class="text-center mb-5">
         <h3>
           Enroll factor

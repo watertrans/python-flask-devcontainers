@@ -134,6 +134,8 @@ class AuthClient:
                     response.user.factors.sort(
                         key=lambda factor: factor.created_at)
                     for factor in response.user.factors:
+                        if factor.status == "unverified":
+                            continue
                         assert factor.friendly_name is not None
                         factor_info = AuthUserFactorInfo(
                             factor.id,

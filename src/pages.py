@@ -7,6 +7,7 @@ from werkzeug.datastructures import MultiDict
 import datetime
 import inject
 import json
+import messages
 
 from services import AuthService
 
@@ -44,7 +45,7 @@ def signin():
         if email:
             form.email.data = email
             form.remember_me.data = True
-    return render_template("pages/signin.html", form=form)
+    return render_template("pages/signin.html", form=form, localized=messages)
 
 
 @bp.route("/signin", methods=["POST"])
@@ -53,7 +54,10 @@ def signin_post(auth_service: AuthService):
     """ Handles the postback of the sign-in screen. """
     form: SigninForm = SigninForm(request.form)
     if not form.validate():
-        flash("Please check your input and try again.", "warning")
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
         session["signin_input"] = json.dumps(request.form)
         return redirect(url_for("pages.signin"))
 
@@ -77,11 +81,11 @@ def signin_post(auth_service: AuthService):
             resp.set_cookie("signin_email", expires=0)
         return resp
     elif auth_result == AuthResult.FAILURE:
-        flash("Invalid email or password. Please try again.", "warning")
+        flash(messages.FORM_AUTH_FAILURE_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
-        flash("Authentication service is currently unavailable. Please try again later.", "warning")
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
     else:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
 
     session["signin_input"] = json.dumps(request.form)
     return redirect(url_for("pages.signin"))
@@ -101,7 +105,7 @@ def verify(auth_service: AuthService):
     auth_result, user_info = auth_service.get_user()
 
     if auth_result != AuthResult.SUCCESS:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
         return redirect(url_for("pages.verify"))
 
     assert user_info is not None
@@ -137,7 +141,7 @@ def verify_post(auth_service: AuthService):
     auth_result, user_info = auth_service.get_user()
 
     if auth_result != AuthResult.SUCCESS:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
         return redirect(url_for("pages.verify"))
 
     assert user_info is not None
@@ -148,14 +152,17 @@ def verify_post(auth_service: AuthService):
             (factor.id, factor.name))
 
     if not form.validate():
-        flash("Please check your input and try again.", "warning")
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
         session["verify_input"] = json.dumps(request.form)
         return redirect(url_for("pages.verify"))
 
     auth_result, challenge_info = auth_service.challenge(form.factor.data)
 
     if auth_result != AuthResult.SUCCESS:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
         return redirect(url_for("pages.verify"))
 
     assert challenge_info is not None
@@ -172,11 +179,11 @@ def verify_post(auth_service: AuthService):
         session["aal_next"] = user_info.aal_next
         return redirect(url_for("pages.home"))
     elif auth_result == AuthResult.FAILURE:
-        flash("Invalid verification code. Please try again.", "warning")
+        flash(messages.FORM_VERIFICATION_FAILURE_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
-        flash("Authentication service is currently unavailable. Please try again later.", "warning")
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
     else:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
 
     session["verify_input"] = json.dumps(request.form)
     return redirect(url_for("pages.verify"))
@@ -192,6 +199,7 @@ def enroll(auth_service: AuthService):
 
     enroll_input = session.get("enroll_input", None)
     if enroll_input:
+        session["enroll_input"] = None
         form: EnrollForm = EnrollForm(MultiDict(json.loads(enroll_input)))
         form.validate()
     else:
@@ -209,7 +217,10 @@ def enroll_post(auth_service: AuthService):
 
     form: EnrollForm = EnrollForm(request.form)
     if not form.validate():
-        flash("Please check your input and try again.", "warning")
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
         session["enroll_input"] = json.dumps(request.form)
         return redirect(url_for("pages.enroll"))
 
@@ -224,11 +235,11 @@ def enroll_post(auth_service: AuthService):
         session["factor_uri"] = factor_info.uri
         return redirect(url_for("pages.enroll_verify"))
     elif auth_result == AuthResult.FAILURE:
-        flash("Invalid input. Please try again.", "warning")
+        flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
-        flash("Authentication service is currently unavailable. Please try again later.", "warning")
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
     else:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
 
     session["enroll_input"] = json.dumps(request.form)
     return redirect(url_for("pages.enroll"))
@@ -251,8 +262,8 @@ def enroll_verify(auth_service: AuthService):
 
     enroll_verify_input = session.get("enroll_verify_input", None)
     if enroll_verify_input:
-        form: EnrollVerifyForm = EnrollVerifyForm(
-            MultiDict(json.loads(enroll_verify_input)))
+        session["enroll_verify_input"] = None
+        form: EnrollVerifyForm = EnrollVerifyForm(MultiDict(json.loads(enroll_verify_input)))
         form.validate()
     else:
         form = EnrollVerifyForm(request.args)
@@ -277,14 +288,17 @@ def enroll_verify_post(auth_service: AuthService):
 
     form: EnrollVerifyForm = EnrollVerifyForm(request.form)
     if not form.validate():
-        flash("Please check your input and try again.", "warning")
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
         session["enroll_verify_input"] = json.dumps(request.form)
         return redirect(url_for("pages.enroll_verify"))
 
     auth_result, challenge_info = auth_service.challenge(factor_id)
 
     if auth_result != AuthResult.SUCCESS:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
         return redirect(url_for("pages.enroll_verify"))
 
     assert challenge_info is not None
@@ -304,11 +318,11 @@ def enroll_verify_post(auth_service: AuthService):
         session["factor_uri"] = None
         return redirect(url_for("pages.verify"))
     elif auth_result == AuthResult.FAILURE:
-        flash("Invalid verification code. Please try again.", "warning")
+        flash(messages.FORM_VERIFICATION_FAILURE_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
-        flash("Authentication service is currently unavailable. Please try again later.", "warning")
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
     else:
-        flash("An unknown error occurred. Please try again later.", "danger")
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
 
     session["enroll_verify_input"] = json.dumps(request.form)
     return redirect(url_for("pages.enroll_verify"))

@@ -8,6 +8,7 @@
 <div class="flex items-center justify-center grow">
   <div class="card card-verify">
     <form action="{{ url_for('pages.verify') }}" class="card-body flex flex-col" method="post">
+      {{ form.csrf_token }}
       <div class="text-center mb-5">
         <h3>
           Verification

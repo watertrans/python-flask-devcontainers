@@ -8,9 +8,10 @@
 <div class="flex items-center justify-center grow">
   <div class="card card-signin">
     <form action="{{ url_for('pages.signin') }}" class="card-body flex flex-col" method="post">
+      {{ form.csrf_token }}
       <div class="text-center mb-5">
         <h3>
-          Sign in
+          {{ localized.SCREEN_SIGNIN }}
         </h3>
         {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}
         <div class="alert alert-{{ category }}">
@@ -21,14 +22,14 @@
           <span class="text-sm text-gray-6">
             Don't have an account?
             <a class="link ml-1" href="{{ url_for('pages.signup') }}" tabindex="5">
-              Sign up
+              {{ localized.FORM_LABEL_SIGNUP }}
             </a>
           </span>
         </div>
       </div>
       <div class="form-group">
         <label class="form-label" for="email">
-          Email
+          {{ localized.FORM_LABEL_EMAIL }}
         </label>
         <input class="form-control {{ is_invalid(form.email.errors) }}" name="email" placeholder="email@example.com" autocomplete="email" type="text" id="email" value="{{ form.email.data }}" inputmode="email" tabindex="1">
         {% for error in form.email.errors %}
@@ -38,10 +39,10 @@
       <div class="form-group">
         <div class="flex items-center justify-between gap-1">
           <label class="form-label" for="password">
-            Password
+            {{ localized.FORM_LABEL_PASSWORD }}
           </label>
           <a class="text-sm link flex-shrink-0" href="{{ url_for('pages.reset_password') }}" tabindex="6">
-            Forgot Password?
+            {{ localized.FORM_LABEL_FORGOT_PASSWORD }}
           </a>
         </div>
         <input class="form-control {{ is_invalid(form.password.errors) }}" name="password" placeholder="Enter Password" autocomplete="current-password" type="password" id="password" value="{{ form.password.data }}" tabindex="2">
@@ -53,12 +54,12 @@
         <div class="form-check">
           <input class="form-check-input" name="remember_me" type="checkbox" id="remember_me" value="true" tabindex="3" {{ is_checked(form.remember_me.data) }}>
           <label class="form-check-label" for="remember_me">
-            Remember me
+            {{ localized.FORM_LABEL_REMEMBER_ME }}
           </label>
         </div>
       </div>
       <button type="submit" name="signin" class="btn btn-primary flex justify-center grow mt-5" value="1" tabindex="4">
-        Sign In
+        {{ localized.FORM_LABEL_SIGNIN }}
       </button>
     </form>
   </div>
