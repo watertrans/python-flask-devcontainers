@@ -67,3 +67,7 @@ class AuthService:
     def update_password(self, password: str):
         """ Updates the user's password. """
         return self.auth_client.update_password(password)
+
+    def sign_out(self):
+        """ Executes user sign-out. """
+        return self.auth_client.sign_out()

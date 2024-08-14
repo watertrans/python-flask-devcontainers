@@ -402,3 +402,20 @@ class AuthClient:
                     return AuthResult.ERROR
         self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
         return AuthResult.UNAVAILABLE
+
+    def sign_out(self) -> AuthResult:
+        """ Executes user sign-out. """
+        supabase = self.get_auth_client()
+        retry_attempts = 5
+        for attempt in range(retry_attempts):
+            try:
+                supabase.auth.sign_out()
+                return AuthResult.SUCCESS
+            except AuthRetryableError as e:
+                self.logger.warn(f"Attempt {attempt + 1} failed with retryable error: {e}")
+                time.sleep(2 ** attempt)
+            except AuthApiError as e:
+                self.logger.exception(msg=e.message)
+                return AuthResult.ERROR
+        self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
+        return AuthResult.UNAVAILABLE

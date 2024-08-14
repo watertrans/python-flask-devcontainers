@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ localized.SCREEN_SIGNOUT }}{% endblock title %}
+
+{% block content %}
+<div class="flex items-center justify-center flex-grow">
+  <div class="card card-auth card-signout">
+    <div class="card-body flex flex-col">
+      <div class="text-center mb-5">
+        <h3>
+          {{ localized.SCREEN_SIGNOUT }}
+        </h3>
+        <div class="flex items-center justify-center">
+          <span class="text-sm text-gray-6">
+            {{ _("You have been signed out.") }}<br>
+            {{ _("We look forward to your next visit.") }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

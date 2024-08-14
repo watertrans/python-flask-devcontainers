@@ -479,3 +479,12 @@ def update_password_post(auth_service: AuthService):
 
     session["update_password_input"] = json.dumps(request.form)
     return redirect(url_for("pages.update_password", token_hash=form.token_hash.data))
+
+
+@bp.route(rule="/signout", methods=["GET"])
+@inject.autoparams()
+def signout(auth_service: AuthService):
+    """ Displays the sign-out screen. """
+    auth_service.sign_out()
+    session.clear()
+    return render_template("pages/signout.html", localized=messages)

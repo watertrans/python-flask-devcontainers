@@ -13,6 +13,7 @@
         "pkce",
         "postback",
         "Retryable",
+        "signedin",
         "signin",
         "SIGNOUT",
         "signup",

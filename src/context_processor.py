@@ -1,3 +1,6 @@
+from flask import session
+
+
 def utility_processor():
     """ Define custom functions available in the template. """
     def is_active(expression: bool) -> str:
@@ -35,4 +38,13 @@ def utility_processor():
         else:
             return ""
 
-    return dict(is_active=is_active, is_disabled=is_disabled, is_valid=is_valid, is_invalid=is_invalid, is_checked=is_checked)
+    def is_signedin() -> bool:
+        """ If singed in, return True. """
+        return session.get("user_id", None)
+
+    return dict(is_active=is_active,
+                is_disabled=is_disabled,
+                is_valid=is_valid,
+                is_invalid=is_invalid,
+                is_checked=is_checked,
+                is_signedin=is_signedin)
