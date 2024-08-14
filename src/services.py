@@ -29,12 +29,19 @@ class AuthService:
                 return True
         return False
 
+    def verify_token_hash_for_recovery(self, token_hash: str):
+        return self.auth_client.verify_otp(token_hash, "recovery")
+
+    def get_session(self):
+        """ Retrieves the current session. """
+        return self.auth_client.get_session()
+
     def get_user(self):
         """ Retrieves the current authenticated user's information. """
         return self.auth_client.get_user()
 
     def sign_up(self, email: str, password: str):
-        """ Sign-up process by creating a new user. """
+        """ Executes user sign-up. """
         return self.auth_client.sign_up(email, password)
 
     def auth(self, email: str, password: str):
@@ -52,3 +59,11 @@ class AuthService:
     def verify(self, factor_id: str, challenge_id: str, code: str):
         """ Verifies a challenge for a factor. """
         return self.auth_client.verify(factor_id, challenge_id, code)
+
+    def reset_password(self, email: str):
+        """ Resets the user's password. """
+        return self.auth_client.reset_password(email)
+
+    def update_password(self, password: str):
+        """ Updates the user's password. """
+        return self.auth_client.update_password(password)

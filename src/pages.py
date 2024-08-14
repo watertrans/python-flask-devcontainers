@@ -369,7 +369,7 @@ def signup_post(auth_service: AuthService):
         flash(messages.FORM_SIGNUP_SUCCESS_ALERT, "success")
         return redirect(url_for("pages.sign_in"))
     elif auth_result == AuthResult.FAILURE:
-        flash(messages.FORM_AUTH_FAILURE_ALERT, "warning")
+        flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
         flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
     else:
@@ -384,6 +384,98 @@ def confirm_signup():
     return render_template("pages/confirm_signup.html", localized=messages)
 
 
-@bp.route("/reset-password")
+@bp.route("/reset-password", methods=["GET"])
 def reset_password():
-    return render_template("pages/reset_password.html")
+    """ Displays the reset password screen. """
+    reset_password_input = session.get("reset_password_input", None)
+    if reset_password_input:
+        session["reset_password_input"] = None
+        form: ResetPasswordForm = ResetPasswordForm(MultiDict(json.loads(reset_password_input)))
+        form.validate()
+    else:
+        form = ResetPasswordForm(request.args)
+    return render_template("pages/reset_password.html", form=form, localized=messages)
+
+
+@bp.route("/reset-password", methods=["POST"])
+@inject.autoparams()
+def reset_password_post(auth_service: AuthService):
+    """ Handles the postback of the reset password screen. """
+    form: ResetPasswordForm = ResetPasswordForm(request.form)
+    if not form.validate():
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
+        session["reset_password_input"] = json.dumps(request.form)
+        return redirect(url_for("pages.reset_password"))
+
+    redirect_to = url_for("pages.update_password", _external=True)
+    auth_result = auth_service.reset_password(form.email.data or "")
+
+    if auth_result == AuthResult.SUCCESS:
+        session["reset_password_input"] = None
+        flash(messages.FORM_RESET_PASSWORD_SUCCESS_ALERT, "success")
+        return redirect(url_for("pages.reset_password"))
+    elif auth_result == AuthResult.FAILURE:
+        flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
+    elif auth_result == AuthResult.UNAVAILABLE:
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
+    else:
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
+
+    session["reset_password_input"] = json.dumps(request.form)
+    return redirect(url_for("pages.reset_password"))
+
+
+@bp.route(rule="/update-password", methods=["GET"])
+@inject.autoparams()
+def update_password(auth_service: AuthService):
+    """ Displays the update password screen. """
+    token_hash = request.args.get("token_hash")
+    if not token_hash:
+        return redirect(url_for(endpoint="pages.reset_password"))
+    update_password_input = session.get("update_password_input", None)
+    if update_password_input:
+        session["update_password_input"] = None
+        form: UpdatePasswordForm = UpdatePasswordForm(MultiDict(json.loads(update_password_input)))
+        form.validate()
+    else:
+        form = UpdatePasswordForm(request.args)
+        form.token_hash.data = token_hash
+    return render_template("pages/update_password.html", form=form, localized=messages)
+
+
+@bp.route("/update-password", methods=["POST"])
+@inject.autoparams()
+def update_password_post(auth_service: AuthService):
+    """ Handles the postback of the update password screen. """
+    form: UpdatePasswordForm = UpdatePasswordForm(request.form)
+    if not form.validate():
+        if form.csrf_token.errors:
+            flash(messages.FORM_CSRF_ALERT, category="danger")
+        else:
+            flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
+        session["update_password_input"] = json.dumps(request.form)
+        return redirect(url_for("pages.update_password", token_hash=form.token_hash.data))
+
+    auth_result = auth_service.verify_token_hash_for_recovery(form.token_hash.data or "")
+    if auth_result != AuthResult.SUCCESS:
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
+        return redirect(url_for(endpoint="pages.reset_password"))
+
+    auth_result = auth_service.update_password(form.password.data or "")
+
+    if auth_result == AuthResult.SUCCESS:
+        session["update_password_input"] = None
+        flash(messages.FORM_UPDATE_PASSWORD_SUCCESS_ALERT, "success")
+        return redirect(url_for("pages.signin"))
+    elif auth_result == AuthResult.FAILURE:
+        flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
+    elif auth_result == AuthResult.UNAVAILABLE:
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
+    else:
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
+
+    session["update_password_input"] = json.dumps(request.form)
+    return redirect(url_for("pages.update_password", token_hash=form.token_hash.data))

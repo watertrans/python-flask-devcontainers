@@ -6,6 +6,7 @@ SCREEN_SIGNUP = _("Sign-Up")
 SCREEN_SIGNOUT = _("Sign-Out")
 SCREEN_FORGOT_PASSWORD = _("Forgot Password")
 SCREEN_RESET_PASSWORD = _("Reset Password")
+SCREEN_UPDATE_PASSWORD = _("Update Password")
 SCREEN_HOME = _("Home")
 SCREEN_ABOUT_US = _("About Us")
 SCREEN_2FA_VERIFY = _("Verify Two-Factor Device")
@@ -75,6 +76,8 @@ FORM_AUTH_UNAVAILABLE_ALERT = _("Authentication service is currently unavailable
 FORM_VERIFICATION_FAILURE_ALERT = _("Invalid verification code. Please try again.")
 FORM_UNKNOWN_ERROR_ALERT = _("An unknown error occurred. Please try again later.")
 FORM_SIGNUP_SUCCESS_ALERT = _("Sign-up has been completed. Please sign in.")
+FORM_RESET_PASSWORD_SUCCESS_ALERT = _("If a registered email address exists, a reset email has been sent.")
+FORM_UPDATE_PASSWORD_SUCCESS_ALERT = _("Your password has been updated.")
 
 # For input field
 FORM_FIELD_REQUIRED = _("This field is required.")
