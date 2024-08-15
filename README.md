@@ -39,6 +39,17 @@ Using the following modules:
 - Install the VS Code Dev Containers extension.
 - Install the VS Code Docker extension.
 
+## Supabase configuraion
+
+This web application uses Supabase for authentication. You need to configure Supabase as follows:
+
+- Change the `Site URL` to `http://127.0.0.1:5000`.
+- In `Email Templates` > `Reset Password`, change `{{ .ConfirmationURL }}` to `{{ .SiteURL }}/update-password?token_hash={{ .TokenHash }}`.
+
+**Note:** The default Supabase email templates are set up for SPAs (Single Page Applications), so you need to modify them for SSR (Server-Side Rendering).
+
+**Note:** If you are self-hosting Supabase, please adjust the corresponding settings accordingly. For reference, see: [Supabase Auth Configuration](https://github.com/supabase/auth?tab=readme-ov-file#configuration).
+
 ## Develop
 To run this template, you will need the Supabase URL and KEY.  
 Please create a .env file following the instructions in config.yaml.  
