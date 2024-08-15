@@ -70,3 +70,26 @@ Access WSL through your terminal, navigate to the src folder as your working dir
 docker run -p 80:8000 -it --rm python-flask-devcontainers
 ```
 **Note:** Ensure that port 80 on your host is available or change it to an available port.
+
+## Screenshots
+
+Sign-Up  
+![signin](docs/screenshots/signup.png)
+
+Sign-In  
+![signin](docs/screenshots/signin.png)
+
+Enroll Two-Factor Device  
+![enroll](docs/screenshots/enroll.png)
+
+Verify Enrolled Two-Factor Device  
+![enroll-verify](docs/screenshots/enroll-verify.png)
+
+Verify Two-Factor Device  
+![verify](docs/screenshots/verify.png)
+
+Reset Password  
+![reset-password](docs/screenshots/reset-password.png)
+
+Update Password  
+![update-password](docs/screenshots/update-password.png)
