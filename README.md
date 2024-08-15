@@ -1,5 +1,5 @@
 # python-flask-devcontainers
-This repository serves as a template project for developing web applications using Python and Flask.  
+This repository is a template project for a server-side rendered web application using Python, Flask, and Supabase.  
 It is built on [Visual Studio Code Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers), making it easy to standardize the development environment across a team.  
 
 ## Features
