@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ localized.SCREEN_MYPAGE }}{% endblock title %}
+
+{% block content %}
+<div class="flex items-center justify-center flex-grow">
+  <div class="card card-auth card-mypage">
+    <div class="card-body flex flex-col">
+      <div class="text-center mb-5">
+        <h3>
+          {{ localized.SCREEN_MYPAGE }}
+        </h3>
+        <div class="flex items-center justify-center">
+          <span class="text-sm text-gray-6">
+            {{ _("This is the My Page screen.") }}<br>
+            {{ _("Two-factor authentication is required to display this page.") }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

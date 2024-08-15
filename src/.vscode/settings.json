@@ -10,6 +10,7 @@
         "levelname",
         "levelno",
         "Logfmt",
+        "mypage",
         "pkce",
         "postback",
         "Retryable",

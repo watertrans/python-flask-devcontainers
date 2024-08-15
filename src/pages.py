@@ -1,15 +1,16 @@
+
 from clients import AssuranceLevel, AuthResult
 from decorators import signin_required
-from flask import Blueprint, flash, make_response, render_template, redirect, request, session, url_for
+from flask import Blueprint, Response, flash, make_response, render_template, redirect, request, session, url_for
 from flask import current_app
 from forms import *
+from services import AuthService
+from utils.web import is_internal_path
 from werkzeug.datastructures import MultiDict
 import datetime
 import inject
 import json
 import messages
-
-from services import AuthService
 
 bp = Blueprint("pages", __name__)
 
@@ -34,9 +35,13 @@ def forms():
 @bp.route("/signin", methods=["GET"])
 def signin():
     """ Displays the sign-in screen. """
-    signin_input = session.get("signin_input", None)
+
+    redirect_to = request.args.get("redirect_to", None)
+    if redirect_to and is_internal_path(redirect_to):
+        session["redirect_to"] = redirect_to
+
+    signin_input = session.pop("signin_input", None)
     if signin_input:
-        session["signin_input"] = None
         form: SigninForm = SigninForm(MultiDict(json.loads(signin_input)))
         form.validate()
     else:
@@ -78,7 +83,12 @@ def signin_post(auth_service: AuthService):
         session["refresh_token"] = session_info.refresh_token
         session["aal_current"] = user_info.aal_current
         session["aal_next"] = user_info.aal_next
-        resp = make_response(redirect(url_for("pages.verify")))
+        redirect_to = session.pop("redirect_to", None)
+        resp: Response
+        if redirect_to:
+            resp = make_response(redirect(redirect_to))
+        else:
+            resp = make_response(redirect(url_for("pages.home")))
         if form.remember_me.data:
             resp.set_cookie("signin_email", form.email.data or "",
                             httponly=True, samesite='Lax', expires=datetime.datetime.now(datetime.UTC) + datetime.timedelta(days=365))
@@ -101,6 +111,11 @@ def signin_post(auth_service: AuthService):
 @inject.autoparams()
 def verify(auth_service: AuthService):
     """ Displays the two-factor authentication verification screen. """
+
+    redirect_to = request.args.get("redirect_to", None)
+    if redirect_to and is_internal_path(redirect_to):
+        session["redirect_to"] = redirect_to
+
     if auth_service.is_two_factor_verified():
         return redirect(url_for("pages.home"))
 
@@ -115,9 +130,8 @@ def verify(auth_service: AuthService):
 
     assert user_info is not None
 
-    verify_input = session.get("verify_input", None)
+    verify_input = session.pop("verify_input", None)
     if verify_input:
-        session["verify_input"] = None
         form: VerifyForm = VerifyForm(MultiDict(json.loads(verify_input)))
         for factor in user_info.factors:
             form.factor.choices.append((factor.id, factor.name))  # type: ignore
@@ -179,7 +193,11 @@ def verify_post(auth_service: AuthService):
         session["user_id"] = user_info.id
         session["aal_current"] = user_info.aal_current
         session["aal_next"] = user_info.aal_next
-        return redirect(url_for("pages.home"))
+        redirect_to = session.pop("redirect_to", None)
+        if redirect_to:
+            return redirect(redirect_to)
+        else:
+            return redirect(url_for("pages.home"))
     elif auth_result == AuthResult.FAILURE:
         flash(messages.FORM_VERIFICATION_FAILURE_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
@@ -196,12 +214,16 @@ def verify_post(auth_service: AuthService):
 @inject.autoparams()
 def enroll(auth_service: AuthService):
     """ Displays the factor enrollment screen. """
-    if auth_service.has_factor() and not auth_service.is_two_factor_verified():
-        return redirect(url_for("pages.verify"))
 
-    enroll_input = session.get("enroll_input", None)
+    redirect_to = request.args.get("redirect_to", None)
+    if redirect_to and is_internal_path(redirect_to):
+        session["redirect_to"] = redirect_to
+
+    if auth_service.has_factor() and not auth_service.is_two_factor_verified():
+        return redirect(url_for("pages.verify", redirect_to=url_for("pages.enroll")))
+
+    enroll_input = session.pop("enroll_input", None)
     if enroll_input:
-        session["enroll_input"] = None
         form: EnrollForm = EnrollForm(MultiDict(json.loads(enroll_input)))
         form.validate()
     else:
@@ -226,8 +248,7 @@ def enroll_post(auth_service: AuthService):
         session["enroll_input"] = json.dumps(request.form)
         return redirect(url_for("pages.enroll"))
 
-    auth_result, factor_info = auth_service.enroll(
-        form.friendly_name.data or "")
+    auth_result, factor_info = auth_service.enroll(form.friendly_name.data or "")
 
     if auth_result == AuthResult.SUCCESS:
         session["enroll_input"] = None
@@ -262,9 +283,8 @@ def enroll_verify(auth_service: AuthService):
     if not factor_id or not factor_qr_code or not factor_uri:
         return redirect(url_for("pages.enroll"))
 
-    enroll_verify_input = session.get("enroll_verify_input", None)
+    enroll_verify_input = session.pop("enroll_verify_input", None)
     if enroll_verify_input:
-        session["enroll_verify_input"] = None
         form: EnrollVerifyForm = EnrollVerifyForm(MultiDict(json.loads(enroll_verify_input)))
         form.validate()
     else:
@@ -318,7 +338,11 @@ def enroll_verify_post(auth_service: AuthService):
         session["factor_id"] = None
         session["factor_qr_code"] = None
         session["factor_uri"] = None
-        return redirect(url_for("pages.verify"))
+        redirect_to = session.pop("redirect_to", None)
+        if redirect_to:
+            return redirect(redirect_to)
+        else:
+            return redirect(url_for("pages.home"))
     elif auth_result == AuthResult.FAILURE:
         flash(messages.FORM_VERIFICATION_FAILURE_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:
@@ -333,9 +357,13 @@ def enroll_verify_post(auth_service: AuthService):
 @bp.route("/signup")
 def signup():
     """ Displays the sign-up screen. """
-    signup_input = session.get("signup_input", None)
+
+    redirect_to = request.args.get("redirect_to", None)
+    if redirect_to and is_internal_path(redirect_to):
+        session["redirect_to"] = redirect_to
+
+    signup_input = session.pop("signup_input", None)
     if signup_input:
-        session["signup_input"] = None
         form: SignupForm = SignupForm(MultiDict(json.loads(signup_input)))
         form.validate()
     else:
@@ -387,9 +415,8 @@ def confirm_signup():
 @bp.route("/reset-password", methods=["GET"])
 def reset_password():
     """ Displays the reset password screen. """
-    reset_password_input = session.get("reset_password_input", None)
+    reset_password_input = session.pop("reset_password_input", None)
     if reset_password_input:
-        session["reset_password_input"] = None
         form: ResetPasswordForm = ResetPasswordForm(MultiDict(json.loads(reset_password_input)))
         form.validate()
     else:
@@ -435,9 +462,8 @@ def update_password(auth_service: AuthService):
     token_hash = request.args.get("token_hash")
     if not token_hash:
         return redirect(url_for(endpoint="pages.reset_password"))
-    update_password_input = session.get("update_password_input", None)
+    update_password_input = session.pop("update_password_input", None)
     if update_password_input:
-        session["update_password_input"] = None
         form: UpdatePasswordForm = UpdatePasswordForm(MultiDict(json.loads(update_password_input)))
         form.validate()
     else:
@@ -485,6 +511,18 @@ def update_password_post(auth_service: AuthService):
 @inject.autoparams()
 def signout(auth_service: AuthService):
     """ Displays the sign-out screen. """
+
+    redirect_to = request.args.get("redirect_to", None)
     auth_service.sign_out()
     session.clear()
-    return render_template("pages/signout.html", localized=messages)
+    if redirect_to and is_internal_path(redirect_to):
+        return redirect(redirect_to)
+    else:
+        return render_template("pages/signout.html", localized=messages)
+
+
+@bp.route(rule="/mypage", methods=["GET"])
+@signin_required(AssuranceLevel.TWO)
+def mypage():
+    """ Displays the my page screen. """
+    return render_template("pages/mypage.html", localized=messages)
