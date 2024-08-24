@@ -44,9 +44,17 @@ class AuthService:
         """ Executes user sign-up. """
         return self.auth_client.sign_up(email, password)
 
-    def auth(self, email: str, password: str):
+    def sign_in_with_oauth(self, provider: str, redirect_to: str):
+        """ Authenticates using an external provider. """
+        return self.auth_client.sign_in_with_oauth(provider, redirect_to)
+
+    def sign_in_with_password(self, email: str, password: str):
         """ Authenticates using an email and password. """
-        return self.auth_client.auth(email, password)
+        return self.auth_client.sign_in_with_password(email, password)
+
+    def exchange_code_for_session(self, code: str):
+        """ Sign-in an existing user by exchanging an Auth Code issued during the PKCE flow. """
+        return self.auth_client.exchange_code_for_session(code)
 
     def enroll(self, friendly_name: str):
         """ Enrolls a new factor. """

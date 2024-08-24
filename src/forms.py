@@ -29,6 +29,7 @@ class SigninForm(CSRFForm):
         Regexp("^[\x21-\x7e]+$", message=messages.FROM_PASSWORD_INVALID_CHARACTERS)], default="")
     remember_me = BooleanField(messages.FORM_LABEL_REMEMBER_ME)
     signin = SubmitField(messages.FORM_LABEL_SIGNIN)
+    google = SubmitField(messages.FORM_LABEL_SIGNIN)
 
 
 class SignupForm(CSRFForm):

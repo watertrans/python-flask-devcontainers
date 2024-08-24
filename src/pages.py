@@ -1,7 +1,7 @@
 
 from clients import AssuranceLevel, AuthResult
 from decorators import signin_required
-from flask import Blueprint, Response, flash, make_response, render_template, redirect, request, session, url_for
+from flask import Blueprint, Response, abort, flash, make_response, render_template, redirect, request, session, url_for
 from flask import current_app
 from forms import *
 from services import AuthService
@@ -30,6 +30,52 @@ def about():
 @bp.route("/forms")
 def forms():
     return render_template("pages/forms.html")
+
+
+@bp.route("/oauth/callback")
+@inject.autoparams()
+def oauth_callback(auth_service: AuthService):
+    """ Handles the postback of the oauth sign-in. """
+
+    error = request.args.get("error", None)
+    if error:
+        match error:
+            case "access_denied":
+                flash(messages.FORM_OAUTH_CANCELLED_ALERT, "danger")
+            case "temporarily_unavailable":
+                flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "danger")
+            case _:
+                flash(messages.FORM_OAUTH_CONFIGURATION_ERROR_ALERT, "danger")
+        return redirect(url_for("pages.signin"))
+
+    code = request.args.get("code", None)
+    if not code:
+        abort(400)
+
+    auth_result, user_info, session_info = auth_service.exchange_code_for_session(code)
+    if auth_result == AuthResult.SUCCESS:
+        assert user_info is not None
+        assert session_info is not None
+        session["user_id"] = user_info.id
+        session["access_token"] = session_info.access_token
+        session["refresh_token"] = session_info.refresh_token
+        session["aal_current"] = user_info.aal_current
+        session["aal_next"] = user_info.aal_next
+        redirect_to = session.pop("redirect_to", None)
+        resp: Response
+        if redirect_to:
+            resp = make_response(redirect(redirect_to))
+        else:
+            resp = make_response(redirect(url_for("pages.home")))
+        return resp
+    elif auth_result == AuthResult.FAILURE:
+        flash(messages.FORM_AUTH_FAILURE_ALERT, "warning")
+    elif auth_result == AuthResult.UNAVAILABLE:
+        flash(messages.FORM_AUTH_UNAVAILABLE_ALERT, "warning")
+    else:
+        flash(messages.FORM_UNKNOWN_ERROR_ALERT, "danger")
+
+    return redirect(url_for("pages.signin"))
 
 
 @bp.route("/signin", methods=["GET"])
@@ -63,6 +109,12 @@ def signin():
 def signin_post(auth_service: AuthService):
     """ Handles the postback of the sign-in screen. """
     form: SigninForm = SigninForm(request.form)
+
+    if form.google.data:
+        auth_result, auth_url = auth_service.sign_in_with_oauth("google", url_for("pages.oauth_callback", _external=True))
+        if auth_result == AuthResult.SUCCESS and auth_url:
+            return redirect(auth_url)
+
     if not form.validate():
         if form.csrf_token.errors:
             flash(messages.FORM_CSRF_ALERT, category="danger")
@@ -71,7 +123,7 @@ def signin_post(auth_service: AuthService):
         session["signin_input"] = json.dumps(request.form)
         return redirect(url_for("pages.signin"))
 
-    auth_result, user_info, session_info = auth_service.auth(
+    auth_result, user_info, session_info = auth_service.sign_in_with_password(
         form.email.data or "", form.password.data or "")
 
     if auth_result == AuthResult.SUCCESS:
@@ -395,7 +447,7 @@ def signup_post(auth_service: AuthService):
         session["signup_input"] = None
         session["signin_email"] = form.email.data or ""
         flash(messages.FORM_SIGNUP_SUCCESS_ALERT, "success")
-        return redirect(url_for("pages.sign_in"))
+        return redirect(url_for("pages.signin"))
     elif auth_result == AuthResult.FAILURE:
         flash(messages.FORM_INVALID_INPUT_ALERT, "warning")
     elif auth_result == AuthResult.UNAVAILABLE:

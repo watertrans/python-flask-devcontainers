@@ -79,6 +79,8 @@ FORM_SIGNUP_SUCCESS_ALERT = _("Sign-up has been completed. Please sign in.")
 FORM_UNKNOWN_ERROR_ALERT = _("An unknown error occurred. Please try again later.")
 FORM_UPDATE_PASSWORD_SUCCESS_ALERT = _("Your password has been updated.")
 FORM_VERIFICATION_FAILURE_ALERT = _("Invalid verification code. Please try again.")
+FORM_OAUTH_CANCELLED_ALERT = "Authentication was canceled by the OAuth provider."
+FORM_OAUTH_CONFIGURATION_ERROR_ALERT = "The OAuth provider configuration is incorrect."
 
 # For input field
 FORM_ACCEPT_TERMS_REQUIRED = _("You must accept to the terms and conditions.")

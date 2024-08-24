@@ -169,6 +169,42 @@ class AuthClient:
         self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
         return (AuthResult.UNAVAILABLE, None)
 
+    def exchange_code_for_session(self, code: str) -> tuple[AuthResult, AuthUserInfo | None, AuthSessionInfo | None]:
+        """
+        Sing-in an existing user by exchanging an Auth Code issued during the PKCE flow.
+        """
+        supabase = self.get_auth_client()
+        retry_attempts = 5
+        for attempt in range(retry_attempts):
+            try:
+                response = supabase.auth.exchange_code_for_session({"auth_code": code})  # type: ignore
+                if not response:
+                    return (AuthResult.FAILURE, None, None)
+                mfa_response = supabase.auth.mfa.get_authenticator_assurance_level()
+                assert response.user is not None
+                assert response.session is not None
+                assert mfa_response.current_level is not None
+                assert mfa_response.next_level is not None
+                user_info = AuthUserInfo(
+                    response.user.id,
+                    mfa_response.current_level,
+                    mfa_response.next_level)
+                session_info = AuthSessionInfo(
+                    response.session.access_token,
+                    response.session.refresh_token)
+                return (AuthResult.SUCCESS, user_info, session_info)
+            except AuthRetryableError as e:
+                self.logger.warn(f"Attempt {attempt + 1} failed with retryable error: {e}")
+                time.sleep(2 ** attempt)
+            except AuthApiError as e:
+                if e.status == 400:
+                    return (AuthResult.FAILURE, None, None)
+                else:
+                    self.logger.exception(msg=e.message)
+                    return (AuthResult.ERROR, None, None)
+        self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
+        return (AuthResult.UNAVAILABLE, None, None)
+
     def get_user(self) -> tuple[AuthResult, AuthUserInfo | None]:
         """
         Retrieves the current authenticated user's information.
@@ -250,7 +286,27 @@ class AuthClient:
         self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
         return (AuthResult.UNAVAILABLE, None)
 
-    def auth(self, email: str, password: str) -> tuple[AuthResult, AuthUserInfo | None, AuthSessionInfo | None]:
+    def sign_in_with_oauth(self, provider: str, redirect_to: str) -> tuple[AuthResult, str | None]:
+        """ Authenticates using an oauth. """
+        supabase = self.get_auth_client()
+        retry_attempts = 5
+        for attempt in range(retry_attempts):
+            try:
+                response = supabase.auth.sign_in_with_oauth({"provider": provider, "options": {"redirect_to": redirect_to}})
+                return (AuthResult.SUCCESS, response.url)
+            except AuthRetryableError as e:
+                self.logger.warn(f"Attempt {attempt + 1} failed with retryable error: {e}")
+                time.sleep(2 ** attempt)
+            except AuthApiError as e:
+                if e.status == 400:
+                    return (AuthResult.FAILURE, None)
+                else:
+                    self.logger.exception(msg=e.message)
+                    return (AuthResult.ERROR, None)
+        self.logger.error("Operation failed after several attempts. Please check your Supabase service.")
+        return (AuthResult.UNAVAILABLE, None)
+
+    def sign_in_with_password(self, email: str, password: str) -> tuple[AuthResult, AuthUserInfo | None, AuthSessionInfo | None]:
         """ Authenticates using an email and password. """
         supabase = self.get_auth_client()
         retry_attempts = 5
