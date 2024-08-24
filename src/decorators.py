@@ -17,7 +17,7 @@ def signin_required(level: AssuranceLevel):
             elif result == AuthResult.TIMEOUT:
                 return redirect(url_for("pages.signin", redirect_to=request.path))
             elif result == AuthResult.UNAVAILABLE:
-                redirect(url_for("errors.service_unavailable"))
+                return redirect(url_for("errors.service_unavailable"))
             elif result == AuthResult.FAILURE:
                 return redirect(url_for("pages.signin", redirect_to=request.path))
             return f(*args, **kwargs)

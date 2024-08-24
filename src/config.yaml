@@ -2,3 +2,4 @@ SUPABASE:
   SUPABASE_URL: dummy          # Declare the key `FLASK_SUPABASE__SUPABASE_URL` in the `.env` file.
   SUPABASE_KEY: dummy          # Declare the key `FLASK_SUPABASE__SUPABASE_KEY` in the `.env` file.
   SUPABASE_ANON_KEY: dummy     # Declare the key `FLASK_SUPABASE__SUPABASE_ANON_KEY` in the `.env` file.
+  MAX_RETRY: 3

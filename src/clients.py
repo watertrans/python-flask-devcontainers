@@ -101,6 +101,7 @@ class AuthClient:
     def __init__(self, logger: log.Logger, config: Config):
         self.logger = logger
         self.config = config
+        self.max_retry: int = config["SUPABASE"]["MAX_RETRY"] or 3
 
     def get_auth_client(self):
         """ Retrieves the authentication client. """
@@ -117,7 +118,7 @@ class AuthClient:
 
     def verify_otp(self, token_hash: str, type: EmailOtpType) -> AuthResult:
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.verify_otp(VerifyTokenHashParams(token_hash=token_hash, type=type))
@@ -145,7 +146,7 @@ class AuthClient:
         if cached_data:
             return (AuthResult.SUCCESS, cast(AuthSessionInfo, cached_data))
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.get_session()
@@ -174,7 +175,7 @@ class AuthClient:
         Sing-in an existing user by exchanging an Auth Code issued during the PKCE flow.
         """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.exchange_code_for_session({"auth_code": code})  # type: ignore
@@ -215,7 +216,7 @@ class AuthClient:
             return (AuthResult.SUCCESS, cast(AuthUserInfo, cached_data))
 
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.get_user()
@@ -262,7 +263,7 @@ class AuthClient:
     def sign_up(self, email: str, password: str) -> tuple[AuthResult, AuthSignUpInfo | None]:
         """ Executes user sign-up. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.sign_up({"email": email, "password": password})
@@ -289,7 +290,7 @@ class AuthClient:
     def sign_in_with_oauth(self, provider: str, redirect_to: str) -> tuple[AuthResult, str | None]:
         """ Authenticates using an oauth. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.sign_in_with_oauth({"provider": provider, "options": {"redirect_to": redirect_to}})
@@ -309,7 +310,7 @@ class AuthClient:
     def sign_in_with_password(self, email: str, password: str) -> tuple[AuthResult, AuthUserInfo | None, AuthSessionInfo | None]:
         """ Authenticates using an email and password. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.sign_in_with_password({"email": email, "password": password})
@@ -341,7 +342,7 @@ class AuthClient:
     def enroll(self, friendly_name: str) -> tuple[AuthResult, FactorInfo | None]:
         """ Enrolls a new factor. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.mfa.enroll({
@@ -368,7 +369,7 @@ class AuthClient:
     def challenge(self, factor_id: str) -> tuple[AuthResult, ChallengeInfo | None]:
         """ Creates a challenge for a factor. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.mfa.challenge(
@@ -390,7 +391,7 @@ class AuthClient:
     def verify(self, factor_id: str, challenge_id: str, code: str) -> tuple[AuthResult, AuthUserInfo | None]:
         """ Verifies a challenge for a factor. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.mfa.verify({
@@ -422,7 +423,7 @@ class AuthClient:
     def reset_password(self, email: str) -> AuthResult:
         """ Resets the user's password. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 supabase.auth.reset_password_email(email)
@@ -442,7 +443,7 @@ class AuthClient:
     def update_password(self, password: str) -> AuthResult:
         """ Updates the user's password. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 response = supabase.auth.update_user({"password": password})
@@ -462,7 +463,7 @@ class AuthClient:
     def sign_out(self) -> AuthResult:
         """ Executes user sign-out. """
         supabase = self.get_auth_client()
-        retry_attempts = 5
+        retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
                 supabase.auth.sign_out()
