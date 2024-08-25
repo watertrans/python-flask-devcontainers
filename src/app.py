@@ -1,13 +1,15 @@
 from clients import AuthClient
 from context_processor import utility_processor
 from dotenv import load_dotenv
-from errors import bp as errors_bp
 from flask import Config, Flask
 from flask_babel import Babel
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask.logging import default_handler
-from pages import bp as pages_bp
+from pages.auth import bp as auth_bp
+from pages.content import bp as content_bp
+from pages.errors import bp as errors_bp
+from pages.mypage import bp as mypage_bp
 from services import AuthService
 from typing import Any
 import datetime
@@ -161,8 +163,10 @@ load_dotenv(override=True)
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 app.logger.removeHandler(default_handler)
-app.register_blueprint(pages_bp)
+app.register_blueprint(auth_bp)
+app.register_blueprint(content_bp)
 app.register_blueprint(errors_bp)
+app.register_blueprint(mypage_bp)
 app.context_processor(utility_processor)
 
 babel = Babel(app)

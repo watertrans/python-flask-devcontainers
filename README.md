@@ -44,7 +44,7 @@ Using the following modules:
 This web application uses Supabase for authentication. You need to configure Supabase as follows:
 
 - Change the `Site URL` to `http://127.0.0.1:5000`.
-- In `Email Templates` > `Reset Password`, change `{{ .ConfirmationURL }}` to `{{ .SiteURL }}/update-password?token_hash={{ .TokenHash }}`.
+- In `Email Templates` > `Reset Password`, change `{{ .ConfirmationURL }}` to `{{ .SiteURL }}/auth/update-password?token_hash={{ .TokenHash }}`.
 
 **Note:** The default Supabase email templates are set up for SPAs (Single Page Applications), so you need to modify them for SSR (Server-Side Rendering).
 

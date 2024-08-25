@@ -5,7 +5,7 @@
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
   <div class="card card-auth card-signup">
-    <form action="{{ url_for('pages.signup') }}" class="card-body flex flex-col" method="post">
+    <form action="{{ url_for('auth.signup') }}" class="card-body flex flex-col" method="post">
       {{ form.csrf_token }}
       <div class="text-center mb-5">
         <h3>
@@ -19,7 +19,7 @@
         <div class="flex flex-col items-center justify-center">
           <span class="text-sm text-gray-6">
             {{ _("Already have an account?") }}
-            <a class="text-sm link" href="{{ url_for('pages.signin') }}">
+            <a class="text-sm link" href="{{ url_for('auth.signin') }}">
               {{ localized.FORM_LABEL_SIGNIN }}
             </a>
           </span>

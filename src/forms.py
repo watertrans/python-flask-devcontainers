@@ -2,9 +2,9 @@ from flask import session
 from flask_wtf import Form
 from typing import cast
 from wtforms import BooleanField, StringField, PasswordField, RadioField, SubmitField, HiddenField
+from wtforms.csrf.core import CSRFTokenField
 from wtforms.csrf.session import SessionCSRF
 from wtforms.validators import DataRequired, EqualTo, Length, Regexp
-from wtforms.csrf.core import CSRFTokenField
 import messages
 import os
 

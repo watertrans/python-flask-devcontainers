@@ -1,29 +1,29 @@
 <nav>
   <ul class="navbar">
-    <li class="nav-item {{ is_active(request.path == url_for('pages.root') or request.path == url_for('pages.home')) }}">
-      <a class="nav-link" href="{{ url_for('pages.home') }}">Home</a>
+    <li class="nav-item {{ is_active(request.path == url_for('content.root') or request.path == url_for('content.home')) }}">
+      <a class="nav-link" href="{{ url_for('content.home') }}">Home</a>
     </li>
-    <li class="nav-item {{ is_active(request.path == url_for('pages.about')) }}">
-      <a class="nav-link" href="{{ url_for('pages.about') }}">About</a>
+    <li class="nav-item {{ is_active(request.path == url_for('content.about')) }}">
+      <a class="nav-link" href="{{ url_for('content.about') }}">About</a>
     </li>
-    <li class="nav-item {{ is_active(request.path == url_for('pages.forms')) }}">
-      <a class="nav-link" href="{{ url_for('pages.forms') }}">Forms</a>
+    <li class="nav-item {{ is_active(request.path == url_for('content.forms')) }}">
+      <a class="nav-link" href="{{ url_for('content.forms') }}">Forms</a>
     </li>
     {% if is_signedin() %}
-    <li class="nav-item {{ is_active(request.path == url_for('pages.mypage')) }}">
-      <a class="nav-link" href="{{ url_for('pages.mypage') }}">My Page</a>
+    <li class="nav-item {{ is_active(request.path == url_for('mypage.index')) }}">
+      <a class="nav-link" href="{{ url_for('mypage.index') }}">My Page</a>
     </li>
     {% endif %}
     {% if is_signedin() %}
-    <li class="nav-item {{ is_active(request.path == url_for('pages.signout')) }}">
-      <a class="nav-link" href="{{ url_for('pages.signout') }}">Sign-Out</a>
+    <li class="nav-item {{ is_active(request.path == url_for('auth.signout')) }}">
+      <a class="nav-link" href="{{ url_for('auth.signout') }}">Sign-Out</a>
     </li>
     {% else %}
-    <li class="nav-item {{ is_active(request.path == url_for('pages.signin')) }}">
-      <a class="nav-link" href="{{ url_for('pages.signin') }}">Sign-in</a>
+    <li class="nav-item {{ is_active(request.path == url_for('auth.signin')) }}">
+      <a class="nav-link" href="{{ url_for('auth.signin') }}">Sign-in</a>
     </li>
-    <li class="nav-item {{ is_active(request.path == url_for('pages.signup')) }}">
-      <a class="nav-link" href="{{ url_for('pages.signup') }}">Sign-up</a>
+    <li class="nav-item {{ is_active(request.path == url_for('auth.signup')) }}">
+      <a class="nav-link" href="{{ url_for('auth.signup') }}">Sign-up</a>
     </li>
     {% endif %}
   </ul>

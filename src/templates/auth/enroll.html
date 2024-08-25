@@ -5,7 +5,7 @@
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
   <div class="card card-auth card-enroll">
-    <form action="{{ url_for('pages.enroll') }}" class="card-body flex flex-col" method="post">
+    <form action="{{ url_for('auth.enroll') }}" class="card-body flex flex-col" method="post">
       {{ form.csrf_token }}
       <div class="text-center mb-5">
         <h3>

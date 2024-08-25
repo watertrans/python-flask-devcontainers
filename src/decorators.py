@@ -13,13 +13,13 @@ def signin_required(level: AssuranceLevel):
             if result == AuthResult.SUCCESS:
                 assert user_info is not None
                 if level.value == AssuranceLevel.TWO.value and user_info.aal_current == AssuranceLevel.ONE.value:
-                    return redirect(url_for("pages.verify", redirect_to=request.path))
+                    return redirect(url_for("auth.verify", redirect_to=request.path))
             elif result == AuthResult.TIMEOUT:
-                return redirect(url_for("pages.signin", redirect_to=request.path))
+                return redirect(url_for("auth.signin", redirect_to=request.path))
             elif result == AuthResult.UNAVAILABLE:
                 return redirect(url_for("errors.service_unavailable"))
             elif result == AuthResult.FAILURE:
-                return redirect(url_for("pages.signin", redirect_to=request.path))
+                return redirect(url_for("auth.signin", redirect_to=request.path))
             return f(*args, **kwargs)
         return decorated
     return decorator

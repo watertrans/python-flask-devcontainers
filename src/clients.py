@@ -2,7 +2,7 @@ from enum import Enum
 from flask import Config, g, session
 from gotrue import SyncSupportedStorage, VerifyTokenHashParams, EmailOtpType
 from gotrue.errors import AuthApiError, AuthRetryableError
-from supabase import create_client, Client
+from supabase import Client
 from supabase.client import ClientOptions
 from typing import List, cast
 from werkzeug.local import LocalProxy
@@ -293,7 +293,7 @@ class AuthClient:
         retry_attempts = self.max_retry
         for attempt in range(retry_attempts):
             try:
-                response = supabase.auth.sign_in_with_oauth({"provider": provider, "options": {"redirect_to": redirect_to}})
+                response = supabase.auth.sign_in_with_oauth({"provider": provider, "options": {"redirect_to": redirect_to}}) # type: ignore
                 return (AuthResult.SUCCESS, response.url)
             except AuthRetryableError as e:
                 self.logger.warn(f"Attempt {attempt + 1} failed with retryable error: {e}")

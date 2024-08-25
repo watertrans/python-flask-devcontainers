@@ -5,7 +5,7 @@
 {% block content %}
 <div class="flex items-center justify-center flex-grow">
   <div class="card card-auth card-confirm-signup">
-    <form action="{{ url_for('pages.signin') }}" class="card-body flex flex-col" method="get">
+    <form action="{{ url_for('auth.signin') }}" class="card-body flex flex-col" method="get">
       <div class="text-center mb-5">
         <h3>
           {{ localized.SCREEN_CONFIRM_SIGNUP }}
